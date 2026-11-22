@@ -11,6 +11,33 @@ ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "drugxpert123"
 
 DB_FILE = "drugxpert_db.json"
+# =========================================================
+# DRUGXPERT AI - BRANDING & ABOUT DATA
+# =========================================================
+
+BRAND_NAME = "DrugXpert AI"
+WELCOME_TEXT = "Welcome to DrugXpert AI"
+
+ABOUT_DEFAULT = {
+    "software_name": "DrugXpert AI",
+    "description": (
+        "DrugXpert AI is an integrated computational platform designed "
+        "for drug–excipient compatibility assessment, solubility prediction, "
+        "Hansen Solubility Parameter analysis and rational excipient selection."
+    ),
+    "developer_name": "Anmol Rajan",
+    "developer_role": "M.Pharm (Pharmaceutics) Research Scholar",
+    "developer_bio": (
+        "Researcher working in pharmaceutics, computational drug delivery, "
+        "AI/ML-assisted excipient selection and cyclodextrin-based drug delivery systems."
+    ),
+    "guide_name": "Guide Name",
+    "guide_role": "Professor / Research Guide",
+    "guide_bio": (
+        "Research guide working in pharmaceutics, formulation development "
+        "and advanced drug delivery research."
+    )
+}
 
 # -------------------------------------------------
 # PAGE CONFIGURATION
@@ -69,58 +96,131 @@ if "current_page" not in st.session_state:
 
 db = st.session_state.db
 
-# -------------------------------------------------
-# CUSTOM CSS
-# -------------------------------------------------
 st.markdown("""
 <style>
-.main {
-    background-color: #f7f9fc;
+
+.stApp {
+    background:
+        radial-gradient(circle at top left,
+        rgba(37,99,235,0.10),
+        transparent 35%),
+        linear-gradient(135deg, #F8FAFC 0%, #EEF4FF 100%);
 }
+
 .block-container {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding-top: 1.5rem;
+    padding-bottom: 3rem;
 }
-.hero {
-    padding: 32px 32px 28px 32px;
-    border-radius: 18px;
-    background: linear-gradient(135deg, #0b4f6c, #087f8c);
-    color: white;
-    margin-bottom: 22px;
+
+#MainMenu {
+    visibility: hidden;
 }
-.hero h1 {
-    font-size: 38px;
-    margin-bottom: 8px;
+
+footer {
+    visibility: hidden;
 }
-.hero p {
-    font-size: 17px;
-    margin-bottom: 0;
+
+header {
+    background: transparent !important;
 }
-.card {
-    padding: 22px;
-    border-radius: 16px;
-    background-color: white;
-    border: 1px solid #e5e9f0;
-    min-height: 185px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    margin-bottom: 10px;
-}
-.card h3 {
-    color: #0b4f6c;
-    margin-bottom: 8px;
-}
-.card p {
-    color: #555;
-    line-height: 1.5;
-}
-.footer {
+
+/* DRUGXPERT AI BRANDING */
+
+.dx-brand {
     text-align: center;
-    color: #777;
-    padding: 30px 0 10px 0;
-    font-size: 13px;
+    padding: 18px 10px 8px 10px;
 }
-</style>
-""", unsafe_allow_html=True)
+
+.dx-logo {
+    width: 78px;
+    height: 78px;
+    margin: auto;
+    border-radius: 22px;
+
+    background:
+        linear-gradient(135deg,
+        #2563EB 0%,
+        #06B6D4 50%,
+        #7C3AED 100%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+    font-size: 38px;
+    font-weight: 900;
+
+    box-shadow:
+        0 12px 35px rgba(37,99,235,0.30);
+}
+
+.dx-brand-title {
+    font-size: 38px;
+    font-weight: 900;
+    margin-top: 12px;
+
+    background:
+        linear-gradient(90deg,
+        #1D4ED8,
+        #0891B2,
+        #7C3AED);
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.dx-brand-subtitle {
+    color: #64748B;
+    font-size: 15px;
+    margin-top: 4px;
+}
+
+/* WELCOME */
+
+.dx-welcome {
+    position: relative;
+    overflow: hidden;
+
+    margin-top: 22px;
+    padding: 38px 30px;
+
+    border-radius: 26px;
+
+    background:
+        linear-gradient(
+        135deg,
+        rgba(15,23,42,0.98),
+        rgba(30,64,175,0.96),
+        rgba(8,145,178,0.94)
+        );
+
+    color: white;
+
+    box-shadow:
+        0 20px 50px rgba(15,23,42,0.20);
+}
+
+.dx-welcome h1 {
+    font-size: 36px;
+    margin: 0;
+    font-weight: 900;
+}
+
+.dx-welcome p {
+    font-size: 16px;
+    opacity: 0.90;
+    margin-top: 10px;
+}
+
+/* CARDS */
+
+.dx-card {
+    background: rgba(255,255,255,0.88);
+    border: 1px solid rgba(148,163,184,0.20);
+    border-radius: 20px;
+    padding: 24px;
+    box
 
 # -------------------------------------------------
 # LOGIN SCREEN (IF NOT LOGGED IN)
