@@ -5,66 +5,47 @@ import math
 import base64
 from datetime import datetime
 
-st.set_page_config(page_title="DrugXpert AI", page_icon="💊", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="DrugXpert AI", page_icon="💊", layout="wide")
 
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "drugxpert123"
+ADMIN_USER = "admin"
+ADMIN_PASS = "drugxpert123"
 DB_FILE = "drugxpert_db.json"
-CONTENT_FILE = "site_content.json"
-ASSET_DIR = "assets"
 
-DEFAULT_DB = {"custom_drugs": {}, "custom_excipients": {}, "logs": []}
-
-DEFAULT_CONTENT = {
-    "welcome_title": "WELCOME TO DRUGXPERT AI",
-    "welcome_subtitle": "Integrated Computational Platform for Drug-Excipient Compatibility, Solubility Prediction and Solvent Selection",
-    "about_title": "About DrugXpert AI",
-    "about_text": "DrugXpert AI is an integrated computational platform designed for drug-excipient compatibility assessment, solubility prediction, Hansen Solubility Parameter analysis, AI/ML-assisted prediction, excipient selection, solvent selection, integrated screening and computational drug-delivery research.",
-    "developer_name": "Anmol Rajan",
-    "developer_role": "M.Pharm (Pharmaceutics) Research Scholar",
-    "developer_bio": "Researcher working in pharmaceutics, computational drug formulation, AI/ML-assisted excipient selection and cyclodextrin-based drug delivery systems.",
-    "developer_interests": "Computational Pharmaceutics, Hansen Solubility Parameters, AI/ML Drug Delivery, Cyclodextrins",
-    "guide_name": "Guide Name",
-    "guide_role": "Professor / Research Guide",
-    "guide_bio": "Research guide providing scientific guidance and supervision for computational pharmaceutics and drug delivery research.",
-    "guide_interests": "Novel Drug Delivery Systems, Formulation Development, Preformulation Science",
-    "logo_file": "",
-    "developer_photo": "",
-    "guide_photo": ""
+DEFAULT_DB = {
+    "title": "DrugXpert AI",
+    "welcome": "WELCOME TO DRUGXPERT AI",
+    "subtitle": "Integrated Computational Platform for Drug-Excipient Compatibility, Solubility Prediction and Solvent Selection",
+    "about": "DrugXpert AI is an integrated computational platform for pharmaceutical research including drug-excipient compatibility, Hansen Solubility Parameter (HSP) analysis, AI/ML solubility prediction, excipient and solvent selection, and integrated screening.",
+    "dev_name": "Anmol Rajan",
+    "dev_role": "M.Pharm (Pharmaceutics) Research Scholar",
+    "dev_bio": "Researcher working in computational pharmaceutics, AI/ML-assisted excipient selection and drug delivery systems.",
+    "guide_name": "Research Guide",
+    "guide_role": "Professor / Research Supervisor",
+    "guide_bio": "Research guide supervising formulation development and computational pharmaceutics research.",
+    "logo": "",
+    "dev_photo": "",
+    "guide_photo": "",
+    "drugs": {
+        "Deflazacort": {"dD": 18.6, "dP": 8.4, "dH": 9.2, "logP": 2.8, "mw": 441.5, "rot": 4, "arom": 0.19},
+        "Artemether": {"dD": 17.4, "dP": 5.1, "dH": 6.8, "logP": 3.1, "mw": 298.4, "rot": 1, "arom": 0.00},
+        "Curcumin": {"dD": 19.2, "dP": 9.8, "dH": 12.4, "logP": 3.2, "mw": 368.4, "rot": 8, "arom": 0.44}
+    },
+    "excipients": {
+        "PVP K30": {"dD": 18.8, "dP": 10.2, "dH": 11.5, "solvents": ["Water", "Ethanol", "Methanol", "Dichloromethane"]},
+        "Soluplus": {"dD": 18.1, "dP": 8.6, "dH": 9.8, "solvents": ["Ethanol", "Acetone", "Methanol", "Dimethylformamide"]},
+        "PEG 6000": {"dD": 17.9, "dP": 9.1, "dH": 11.0, "solvents": ["Water", "Ethanol", "Chloroform", "Acetonitrile"]},
+        "Poloxamer 188": {"dD": 17.5, "dP": 7.4, "dH": 9.5, "solvents": ["Water", "Ethanol", "Isopropanol"]},
+        "Poloxamer 407": {"dD": 17.6, "dP": 7.2, "dH": 9.1, "solvents": ["Water", "Ethanol", "Methanol"]},
+        "HPMC": {"dD": 18.4, "dP": 9.5, "dH": 13.2, "solvents": ["Water", "Ethanol-Water Mixture", "Dichloromethane-Methanol"]}
+    },
+    "logs": []
 }
 
-DEFAULT_DRUGS = {
-    "Deflazacort": {"dD": 18.6, "dP": 8.4, "dH": 9.2, "logP": 2.8, "mw": 441.5, "rot": 4, "arom": 0.19},
-    "Artemether": {"dD": 17.4, "dP": 5.1, "dH": 6.8, "logP": 3.1, "mw": 298.4, "rot": 1, "arom": 0.00},
-    "Curcumin": {"dD": 19.2, "dP": 9.8, "dH": 12.4, "logP": 3.2, "mw": 368.4, "rot": 8, "arom": 0.44}
-}
-
-DEFAULT_EXCIPIENTS = {
-    "PVP K30": {"dD": 18.8, "dP": 10.2, "dH": 11.5, "solvents": ["Water", "Ethanol", "Methanol", "Dichloromethane"]},
-    "Soluplus": {"dD": 18.1, "dP": 8.6, "dH": 9.8, "solvents": ["Ethanol", "Acetone", "Methanol", "Dimethylformamide"]},
-    "PEG 6000": {"dD": 17.9, "dP": 9.1, "dH": 11.0, "solvents": ["Water", "Ethanol", "Chloroform", "Acetonitrile"]},
-    "Poloxamer 188": {"dD": 17.5, "dP": 7.4, "dH": 9.5, "solvents": ["Water", "Ethanol", "Isopropanol"]},
-    "Poloxamer 407": {"dD": 17.6, "dP": 7.2, "dH": 9.1, "solvents": ["Water", "Ethanol", "Methanol"]},
-    "HPMC": {"dD": 18.4, "dP": 9.5, "dH": 13.2, "solvents": ["Water", "Ethanol-Water Mixture", "Dichloromethane-Methanol"]}
-}
-
-DEFAULT_SVG = (
-    '<svg xmlns="http://w3.org" viewBox="0 0 200 200" width="200" height="200">'
-    '<polygon points="100,10 180,55 180,145 100,190 20,145 20,55" fill="#0d263d" stroke="#55e6ee" stroke-width="5"/>'
-    '<circle cx="100" cy="100" r="62" fill="none" stroke="#ff7c96" stroke-width="2" stroke-dasharray="6 4"/>'
-    '<polygon points="72,72 92,60 112,72 112,95 92,107 72,95" fill="none" stroke="#55e6ee" stroke-width="3"/>'
-    '<circle cx="92" cy="60" r="4" fill="#ffffff"/><circle cx="112" cy="95" r="4" fill="#ff7c96"/>'
-    '<text x="100" y="160" text-anchor="middle" fill="#eaf7ff" font-family="sans-serif" font-size="16" font-weight="800">DX-AI</text>'
-    '</svg>'
-)
-DEFAULT_LOGO_URI = "data:image/svg+xml;base64," + base64.b64encode(DEFAULT_SVG.encode("utf-8")).decode("utf-8")
-
-
-def load_json_file(filepath, default_dict):
-    data = json.loads(json.dumps(default_dict))
-    if os.path.exists(filepath):
+def load_db():
+    data = json.loads(json.dumps(DEFAULT_DB))
+    if os.path.exists(DB_FILE):
         try:
-            with open(filepath, "r", encoding="utf-8") as f:
+            with open(DB_FILE, "r", encoding="utf-8") as f:
                 saved = json.load(f)
             if isinstance(saved, dict):
                 data.update(saved)
@@ -72,134 +53,173 @@ def load_json_file(filepath, default_dict):
             pass
     return data
 
-
-def save_json_file(filepath, data):
-    with open(filepath, "w", encoding="utf-8") as f:
+def save_db(data):
+    with open(DB_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
 
-
-def save_uploaded_file(uploaded_file, filename):
-    if uploaded_file is None:
+def to_b64(up):
+    if up is None:
         return ""
-    os.makedirs(ASSET_DIR, exist_ok=True)
-    file_path = os.path.join(ASSET_DIR, filename)
-    with open(file_path, "wb") as f:
-        f.write(uploaded_file.getbuffer())
-    return file_path
+    return f"data:{up.type or 'image/png'};base64,{base64.b64encode(up.getvalue()).decode()}"
 
-
-def image_to_base64(image_path):
-    if not image_path or not os.path.exists(image_path):
-        return ""
-    try:
-        with open(image_path, "rb") as f:
-            data = base64.b64encode(f.read()).decode("utf-8")
-        ext = image_path.lower().split(".")[-1]
-        if ext == "jpg":
-            ext = "jpeg"
-        if ext == "svg":
-            ext = "svg+xml"
-        return f"data:image/{ext};base64,{data}"
-    except Exception:
-        return ""
-
-
-def get_active_logo(content):
-    saved = image_to_base64(content.get("logo_file", ""))
-    return saved if saved else DEFAULT_LOGO_URI
-
-
-def image_html(data_uri, width=120, height=120):
-    if not data_uri:
-        return ""
-    return f'<img src="{data_uri}" style="width:{width}px;height:{height}px;object-fit:cover;border-radius:50%;border:3px solid #55e6ee;margin-bottom:10px;">'
-
-
-def hsp_distance(d1, d2):
+def calc_ra(d1, d2):
     return math.sqrt(4 * (d1["dD"] - d2["dD"]) ** 2 + (d1["dP"] - d2["dP"]) ** 2 + (d1["dH"] - d2["dH"]) ** 2)
 
+def calc_logs(ra):
+    return round(-2.0 + (4.0 / (1.0 + ra)), 3)
 
-def compatibility_label(ra):
-    if ra <= 3:
-        return "Excellent Compatibility"
-    elif ra <= 5:
-        return "Good Compatibility"
-    elif ra <= 7:
-        return "Moderate Compatibility"
-    else:
-        return "Poor Compatibility"
-
-
-def screening_log_s(drug, ra):
-    base = 1.0 / (1.0 + ra)
-    return round(-2.0 + (base * 4.0), 3)
-
-
-def apply_premium_theme(logo_uri):
-    css = (
-        "<style>"
-        ".stApp{background-color:#07121f;color:#ffffff;}"
-        f'.stApp::before{{content:"";position:fixed;top:52%;left:54%;transform:translate(-50%,-50%);width:400px;height:400px;background-image:url("{logo_uri}");background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.05;pointer-events:none;z-index:0;}}'
-        'section[data-testid="stSidebar"]{background-color:#06101c;border-right:1px solid rgba(85,230,238,0.2);}'
-        "h1,h2,h3,h4,p,label,span{color:#f0f8ff !important;}"
-        ".dx-card,.card{background:#0d2238;border:1px solid rgba(85,230,238,0.28);border-radius:18px;padding:22px;margin:10px 0;}"
-        ".profile-card{background:#0d2238;border:1px solid rgba(85,230,238,0.28);border-radius:18px;padding:22px;text-align:center;}"
-        ".dx-hero{padding:34px 26px;border-radius:22px;text-align:center;background:#0a2a44;border:1px solid rgba(85,230,238,0.35);margin-bottom:16px;}"
-        ".dx-hero-title{font-size:36px;font-weight:800;color:#55e6ee !important;margin-bottom:8px;}"
-        ".dx-hero-subtitle{color:#d0e8f5 !important;font-size:16px;}"
-        ".stButton>button{border-radius:10px !important;border:1px solid #55e6ee !important;background:#087f91 !important;color:#ffffff !important;font-weight:700 !important;}"
-        'div[data-testid="stMetric"]{background:#0d2238;border:1px solid rgba(85,230,238,0.25);padding:14px;border-radius:14px;}'
-        ".dx-watermark{position:fixed;bottom:20px;right:26px;font-size:42px;font-weight:900;color:rgba(85,230,238,0.05);transform:rotate(-12deg);pointer-events:none;z-index:0;}"
-        '</style><div class="dx-watermark">DRUGXPERT AI</div>'
-    )
-    st.markdown(css, unsafe_allow_html=True)
-
-
-if "custom_db" not in st.session_state:
-    st.session_state.custom_db = load_json_file(DB_FILE, DEFAULT_DB)
-
-if "site_content" not in st.session_state:
-    st.session_state.site_content = load_json_file(CONTENT_FILE, DEFAULT_CONTENT)
-
+if "db" not in st.session_state:
+    st.session_state.db = load_db()
 if "role" not in st.session_state:
     st.session_state.role = None
-    st.session_state.username = ""
+    st.session_state.user = ""
 
-if "page" not in st.session_state:
-    st.session_state.page = "Home"
+db = st.session_state.db
 
-custom_db = st.session_state.custom_db
-content = st.session_state.site_content
-active_logo = get_active_logo(content)
-apply_premium_theme(active_logo)
+st.markdown("""
+<style>
+.stApp {background-color: #07121f; color: #ffffff;}
+.box {background: #0e253d; border: 1px solid #2ccce4; border-radius: 14px; padding: 20px; margin-bottom: 14px;}
+.wm {position: fixed; bottom: 16px; right: 24px; font-size: 40px; font-weight: 900; color: rgba(85,230,238,0.06); pointer-events: none;}
+</style><div class="wm">DRUGXPERT AI</div>
+""", unsafe_allow_html=True)
 
 if st.session_state.role is None:
-    st.markdown(
-        f'<div class="dx-hero"><img src="{active_logo}" style="width:90px;height:90px;object-fit:contain;margin-bottom:8px;">'
-        f'<div class="dx-hero-title">{content.get("welcome_title", "WELCOME TO DRUGXPERT AI")}</div>'
-        f'<div class="dx-hero-subtitle">{content.get("welcome_subtitle", "")}</div></div>',
-        unsafe_allow_html=True
-    )
-    c1, c2, c3 = st.columns([1, 1.4, 1])
+    if db.get("logo"):
+        st.image(db["logo"], width=100)
+    st.title(f"💊 {db['welcome']}")
+    st.write(db["subtitle"])
+    t1, t2 = st.tabs(["👤 Participant Login", "🛡️ Admin Login"])
+    with t1:
+        name = st.text_input("Full Name *")
+        dept = st.text_input("Department / Lab")
+        if st.button("Enter Software", type="primary"):
+            if name.strip():
+                st.session_state.role = "participant"
+                st.session_state.user = name.strip()
+                db["logs"].insert(0, {"Name": name.strip(), "Dept": dept.strip() or "General", "Time": datetime.now().strftime("%Y-%m-%d %H:%M")})
+                save_db(db)
+                st.rerun()
+            else:
+                st.error("Enter your name.")
+    with t2:
+        u = st.text_input("Admin Username")
+        p = st.text_input("Admin Password", type="password")
+        if st.button("Login as Admin", type="primary"):
+            if u.strip() == ADMIN_USER and p == ADMIN_PASS:
+                st.session_state.role = "admin"
+                st.session_state.user = "Admin"
+                st.rerun()
+            else:
+                st.error("Invalid credentials.")
+    st.stop()
+
+pages = ["Home", "HSP Compatibility", "AI/ML Solubility", "Solvent Lookup", "Integrated Screening", "About"]
+if st.session_state.role == "admin":
+    pages.append("Admin Panel")
+
+st.sidebar.title(f"💊 {db['title']}")
+st.sidebar.write(f"Logged in: **{st.session_state.user}**")
+page = st.sidebar.radio("Go to", pages)
+if st.sidebar.button("Logout"):
+    st.session_state.role = None
+    st.rerun()
+
+if page == "Home":
+    if db.get("logo"):
+        st.image(db["logo"], width=110)
+    st.title(db["welcome"])
+    st.write(db["subtitle"])
+    st.markdown(f"<div class='box'><h3>About the Software</h3><p>{db['about']}</p></div>", unsafe_allow_html=True)
+    c1, c2 = st.columns(2)
+    with c1:
+        st.markdown(f"<div class='box'><h4>Developer: {db['dev_name']}</h4><p><b>{db['dev_role']}</b></p><p>{db['dev_bio']}</p></div>", unsafe_allow_html=True)
+        if db.get("dev_photo"):
+            st.image(db["dev_photo"], width=120)
     with c2:
-        t1, t2 = st.tabs(["👤 Participant Login", "🛡️ Admin Login"])
-        with t1:
-            p_name = st.text_input("Enter Your Full Name *", placeholder="e.g. Rahul Sharma")
-            p_dept = st.text_input("Department / Lab (Optional)", placeholder="e.g. Pharmaceutics")
-            if st.button("Enter Software →", use_container_width=True):
-                if p_name.strip():
-                    st.session_state.role = "participant"
-                    st.session_state.username = p_name.strip()
-                    st.session_state.page = "Home"
-                    custom_db["logs"].insert(0, {"Name": p_name.strip(), "Department": p_dept.strip() or "General", "Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
-                    save_json_file(DB_FILE, custom_db)
-                    st.rerun()
-                else:
-                    st.error("Please enter your name!")
-        with t2:
-            u = st.text_input("Admin Username", placeholder="admin")
-            p = st.text_input("Admin Password", type="password", placeholder="Enter password")
-            if st.button("Login as Admin 🔒", use_container_width=True):
-                if u.strip() == ADMIN_USERNAME and p == ADMIN_PASSWORD:
-                    st.session_state.role = "admin"
-                    st.session_state.username = f"Admin ({u.strip()})"
+        st.markdown(f"<div class='box'><h4>Guide: {db['guide_name']}</h4><p><b>{db['guide_role']}</b></p><p>{db['guide_bio']}</p></div>", unsafe_allow_html=True)
+        if db.get("guide_photo"):
+            st.image(db["guide_photo"], width=120)
+
+elif page == "HSP Compatibility":
+    st.header("🧪 HSP Compatibility & Ra Calculation")
+    drug = st.selectbox("Select Drug", list(db["drugs"].keys()))
+    exc = st.selectbox("Select Excipient", list(db["excipients"].keys()))
+    d, e = db["drugs"][drug], db["excipients"][exc]
+    ra = calc_ra(d, e)
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("HSP Ra", f"{ra:.3f}")
+    c2.metric("ΔδD", f"{abs(d['dD']-e['dD']):.2f}")
+    c3.metric("ΔδP", f"{abs(d['dP']-e['dP']):.2f}")
+    c4.metric("ΔδH", f"{abs(d['dH']-e['dH']):.2f}")
+    st.success("Excellent Compatibility" if ra <= 3 else ("Good Compatibility" if ra <= 5 else "Moderate/Poor Compatibility"))
+
+elif page == "AI/ML Solubility":
+    st.header("🤖 AI/ML Solubility Screening (logS)")
+    drug = st.selectbox("Select Drug", list(db["drugs"].keys()))
+    exc = st.selectbox("Select Excipient", list(db["excipients"].keys()))
+    d, e = db["drugs"][drug], db["excipients"][exc]
+    ra = calc_ra(d, e)
+    logs = calc_logs(ra)
+    ug = (10 ** logs) * d["mw"] * 1000
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Estimated logS", f"{logs:.3f}")
+    c2.metric("Solubility (µg/mL)", f"{ug:.2f}")
+    c3.metric("HSP Ra", f"{ra:.3f}")
+    st.dataframe({"Descriptor": ["MW", "LogP", "Rotatable Bonds", "Aromatic Prop"], "Value": [d["mw"], d["logP"], d["rot"], d["arom"]]})
+
+elif page == "Solvent Lookup":
+    st.header("💧 Solvent Lookup")
+    exc = st.selectbox("Select Excipient", list(db["excipients"].keys()))
+    solvs = db["excipients"][exc].get("solvents", [])
+    st.success(f"Solvents ({len(solvs)}): " + ", ".join(solvs))
+
+elif page == "Integrated Screening":
+    st.header("🧬 Integrated Screening")
+    drug = st.selectbox("Select Drug", list(db["drugs"].keys()))
+    exc = st.selectbox("Select Excipient", list(db["excipients"].keys()))
+    d, e = db["drugs"][drug], db["excipients"][exc]
+    ra = calc_ra(d, e)
+    logs = calc_logs(ra)
+    ug = (10 ** logs) * d["mw"] * 1000
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Drug", drug)
+    c2.metric("Excipient", exc)
+    c3.metric("HSP Ra", f"{ra:.2f}")
+    c4.metric("Est. µg/mL", f"{ug:.2f}")
+    st.info("Recommended Solvents: " + ", ".join(e.get("solvents", [])))
+
+elif page == "About":
+    st.header("📖 About DrugXpert AI")
+    st.write(db["about"])
+    st.subheader(f"Developer: {db['dev_name']} ({db['dev_role']})")
+    st.write(db["dev_bio"])
+    st.subheader(f"Guide: {db['guide_name']} ({db['guide_role']})")
+    st.write(db["guide_bio"])
+
+elif page == "Admin Panel":
+    st.header("🛡️ Admin Control Panel")
+    t1, t2, t3, t4, t5 = st.tabs(["Branding & Logo", "Developer & Guide", "Drugs", "Excipients", "Logs"])
+    with t1:
+        db["title"] = st.text_input("App Title", db["title"])
+        db["welcome"] = st.text_input("Welcome Heading", db["welcome"])
+        db["subtitle"] = st.text_area("Subtitle", db["subtitle"])
+        db["about"] = st.text_area("About Text", db["about"])
+        up_l = st.file_uploader("Upload Logo", type=["png", "jpg", "jpeg"])
+        if up_l:
+            db["logo"] = to_b64(up_l)
+        if st.button("Save Branding"):
+            save_db(db)
+            st.success("Saved!")
+    with t2:
+        db["dev_name"] = st.text_input("Developer Name", db["dev_name"])
+        db["dev_role"] = st.text_input("Developer Role", db["dev_role"])
+        db["dev_bio"] = st.text_area("Developer Bio", db["dev_bio"])
+        up_d = st.file_uploader("Developer Photo", type=["png", "jpg", "jpeg"])
+        if up_d:
+            db["dev_photo"] = to_b64(up_d)
+        db["guide_name"] = st.text_input("Guide Name", db["guide_name"])
+        db["guide_role"] = st.text_input("Guide Role", db["guide_role"])
+        db["guide_bio"] = st.text_area("Guide Bio", db["guide_bio"])
+        up_g = st.file_uploader("Guide Photo", type=["png", "jpg", "jpeg"])
+        if up_g:
