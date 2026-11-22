@@ -5,12 +5,7 @@ import math
 import base64
 from datetime import datetime
 
-st.set_page_config(
-    page_title="DrugXpert AI",
-    page_icon="💊",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+st.set_page_config(page_title="DrugXpert AI", page_icon="💊", layout="wide", initial_sidebar_state="expanded")
 
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "drugxpert123"
@@ -18,24 +13,21 @@ DB_FILE = "drugxpert_db.json"
 CONTENT_FILE = "site_content.json"
 ASSET_DIR = "assets"
 
-DEFAULT_DB = {
-    "custom_drugs": {},
-    "custom_excipients": {},
-    "logs": []
-}
+DEFAULT_DB = {"custom_drugs": {}, "custom_excipients": {}, "logs": []}
 
 DEFAULT_CONTENT = {
     "welcome_title": "WELCOME TO DRUGXPERT AI",
-    "welcome_subtitle": "AI-Assisted Computational Platform for Rational Drug Formulation Development",
+    "welcome_subtitle": "Integrated Computational Platform for Drug-Excipient Compatibility, Solubility Prediction and Solvent Selection",
     "about_title": "About DrugXpert AI",
-    "about_text": "DrugXpert AI is an integrated computational platform designed to support rational drug formulation development through computational screening, molecular descriptors, machine learning, Hansen Solubility Parameter analysis, solubility prediction and solvent compatibility analysis.",
+    "about_text": "DrugXpert AI is an integrated computational platform designed for drug-excipient compatibility assessment, solubility prediction, Hansen Solubility Parameter analysis, AI/ML-assisted prediction, excipient selection, solvent selection, integrated screening and computational drug-delivery research.",
     "developer_name": "Anmol Rajan",
-    "developer_role": "M.Pharm (Pharmaceutics) Researcher",
+    "developer_role": "M.Pharm (Pharmaceutics) Research Scholar",
     "developer_bio": "Researcher working in pharmaceutics, computational drug formulation, AI/ML-assisted excipient selection and cyclodextrin-based drug delivery systems.",
+    "developer_interests": "Computational Pharmaceutics, Hansen Solubility Parameters, AI/ML Drug Delivery, Cyclodextrins",
     "guide_name": "Guide Name",
-    "guide_role": "Research Guide / Professor",
+    "guide_role": "Professor / Research Guide",
     "guide_bio": "Research guide providing scientific guidance and supervision for computational pharmaceutics and drug delivery research.",
-    "software_features": "HSP Compatibility\nAI/ML Solubility Prediction\nSolvent Lookup\nIntegrated Computational Screening",
+    "guide_interests": "Novel Drug Delivery Systems, Formulation Development, Preformulation Science",
     "logo_file": "",
     "developer_photo": "",
     "guide_photo": ""
@@ -56,42 +48,33 @@ DEFAULT_EXCIPIENTS = {
     "HPMC": {"dD": 18.4, "dP": 9.5, "dH": 13.2, "solvents": ["Water", "Ethanol-Water Mixture", "Dichloromethane-Methanol"]}
 }
 
+DEFAULT_SVG = (
+    '<svg xmlns="http://w3.org" viewBox="0 0 200 200" width="200" height="200">'
+    '<polygon points="100,10 180,55 180,145 100,190 20,145 20,55" fill="#0d263d" stroke="#55e6ee" stroke-width="5"/>'
+    '<circle cx="100" cy="100" r="62" fill="none" stroke="#ff7c96" stroke-width="2" stroke-dasharray="6 4"/>'
+    '<polygon points="72,72 92,60 112,72 112,95 92,107 72,95" fill="none" stroke="#55e6ee" stroke-width="3"/>'
+    '<circle cx="92" cy="60" r="4" fill="#ffffff"/><circle cx="112" cy="95" r="4" fill="#ff7c96"/>'
+    '<text x="100" y="160" text-anchor="middle" fill="#eaf7ff" font-family="sans-serif" font-size="16" font-weight="800">DX-AI</text>'
+    '</svg>'
+)
+DEFAULT_LOGO_URI = "data:image/svg+xml;base64," + base64.b64encode(DEFAULT_SVG.encode("utf-8")).decode("utf-8")
 
-def load_custom_db():
-    if os.path.exists(DB_FILE):
+
+def load_json_file(filepath, default_dict):
+    data = json.loads(json.dumps(default_dict))
+    if os.path.exists(filepath):
         try:
-            with open(DB_FILE, "r", encoding="utf-8") as f:
-                data = json.load(f)
-            merged = json.loads(json.dumps(DEFAULT_DB))
-            if isinstance(data, dict):
-                merged.update(data)
-            return merged
+            with open(filepath, "r", encoding="utf-8") as f:
+                saved = json.load(f)
+            if isinstance(saved, dict):
+                data.update(saved)
         except Exception:
             pass
-    return json.loads(json.dumps(DEFAULT_DB))
+    return data
 
 
-def save_custom_db(data):
-    with open(DB_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=4, ensure_ascii=False)
-
-
-def load_site_content():
-    if os.path.exists(CONTENT_FILE):
-        try:
-            with open(CONTENT_FILE, "r", encoding="utf-8") as f:
-                data = json.load(f)
-            merged = DEFAULT_CONTENT.copy()
-            if isinstance(data, dict):
-                merged.update(data)
-            return merged
-        except Exception:
-            pass
-    return json.loads(json.dumps(DEFAULT_CONTENT))
-
-
-def save_site_content(data):
-    with open(CONTENT_FILE, "w", encoding="utf-8") as f:
+def save_json_file(filepath, data):
+    with open(filepath, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
 
 
@@ -110,31 +93,30 @@ def image_to_base64(image_path):
         return ""
     try:
         with open(image_path, "rb") as f:
-            data = base64.b64encode(f.read()).decode()
+            data = base64.b64encode(f.read()).decode("utf-8")
         ext = image_path.lower().split(".")[-1]
         if ext == "jpg":
             ext = "jpeg"
+        if ext == "svg":
+            ext = "svg+xml"
         return f"data:image/{ext};base64,{data}"
     except Exception:
         return ""
 
 
+def get_active_logo(content):
+    saved = image_to_base64(content.get("logo_file", ""))
+    return saved if saved else DEFAULT_LOGO_URI
+
+
 def image_html(data_uri, width=120, height=120):
     if not data_uri:
         return ""
-    return (
-        f'<img src="{data_uri}" style="width:{width}px;height:{height}px;'
-        f'object-fit:cover;border-radius:50%;border:4px solid white;'
-        f'box-shadow:0 8px 25px rgba(15,23,42,.18);margin-bottom:10px;">'
-    )
+    return f'<img src="{data_uri}" style="width:{width}px;height:{height}px;object-fit:cover;border-radius:50%;border:3px solid #55e6ee;box-shadow:0 8px 25px rgba(0,0,0,0.3);margin-bottom:10px;">'
 
 
 def hsp_distance(d1, d2):
-    return math.sqrt(
-        4 * (d1["dD"] - d2["dD"]) ** 2
-        + (d1["dP"] - d2["dP"]) ** 2
-        + (d1["dH"] - d2["dH"]) ** 2
-    )
+    return math.sqrt(4 * (d1["dD"] - d2["dD"]) ** 2 + (d1["dP"] - d2["dP"]) ** 2 + (d1["dH"] - d2["dH"]) ** 2)
 
 
 def compatibility_label(ra):
@@ -153,51 +135,49 @@ def screening_log_s(drug, ra):
     return round(-2.0 + (base * 4.0), 3)
 
 
-def apply_premium_theme():
+def apply_premium_theme(logo_uri):
     css = (
         "<style>"
-        ".stApp { background: linear-gradient(135deg, #07121f 0%, #0a1928 50%, #07111d 100%); color: #f5f9ff; }"
-        ".main .block-container { max-width: 1250px; padding-top: 2rem; padding-bottom: 4rem; }"
-        "section[data-testid='stSidebar'] { background: linear-gradient(180deg, #06101c 0%, #091c2b 100%); border-right: 1px solid rgba(0, 210, 230, 0.18); }"
-        "section[data-testid='stSidebar'] * { color: #eaf7ff !important; }"
-        "h1, h2, h3 { color: #ffffff !important; letter-spacing: -0.3px; }"
-        ".dx-card, .card { background: linear-gradient(145deg, rgba(17, 38, 58, 0.92), rgba(7, 22, 36, 0.88)); border: 1px solid rgba(65, 220, 235, 0.18); border-radius: 20px; padding: 25px; margin: 12px 0; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.28); }"
-        ".profile-card { background: linear-gradient(145deg, rgba(17, 38, 58, 0.92), rgba(7, 22, 36, 0.88)); border: 1px solid rgba(65, 220, 235, 0.22); border-radius: 20px; padding: 25px; text-align: center; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.28); }"
-        ".dx-hero { padding: 45px 35px; border-radius: 28px; text-align: center; background: linear-gradient(135deg, rgba(8, 48, 72, 0.96), rgba(12, 28, 47, 0.96)); border: 1px solid rgba(50, 220, 235, 0.25); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35); }"
-        ".dx-hero-title { font-size: 42px; font-weight: 800; background: linear-gradient(90deg, #ffffff, #55e6ee, #ff7c96); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }"
-        ".dx-hero-subtitle { color: #b9d9e8; font-size: 17px; line-height: 1.6; }"
-        ".stButton > button { border-radius: 12px !important; border: 1px solid rgba(50, 220, 235, 0.30) !important; background: linear-gradient(135deg, #087f91, #0aa6ad) !important; color: white !important; font-weight: 700 !important; min-height: 45px; }"
-        "input, textarea { background-color: rgba(5, 17, 29, 0.85) !important; color: white !important; border: 1px solid rgba(100, 210, 230, 0.20) !important; border-radius: 10px !important; }"
-        "div[data-testid='stMetric'] { background: rgba(12, 35, 52, 0.8); border: 1px solid rgba(50, 220, 235, 0.15); padding: 15px; border-radius: 15px; }"
-        ".dx-watermark { position: fixed; bottom: 25px; right: 30px; font-size: 52px; font-weight: 900; color: rgba(80, 220, 235, 0.035); transform: rotate(-12deg); pointer-events: none; z-index: 0; letter-spacing: 3px; }"
-        "</style><div class='dx-watermark'>DRUGXPERT AI</div>"
+        ".stApp{background:linear-gradient(135deg,#07121f 0%,#0a1928 50%,#07111d 100%);color:#f5f9ff;}"
+        f'.stApp::before{{content:"";position:fixed;top:52%;left:54%;transform:translate(-50%,-50%);width:420px;height:420px;background-image:url("{logo_uri}");background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.045;pointer-events:none;z-index:0;}}'
+        'section[data-testid="stSidebar"]{background:linear-gradient(180deg,#06101c 0%,#091c2b 100%);border-right:1px solid rgba(0,210,230,0.18);}'
+        'section[data-testid="stSidebar"] *{color:#eaf7ff !important;}'
+        "h1,h2,h3{color:#ffffff !important;}"
+        ".dx-card,.card{background:linear-gradient(145deg,rgba(17,38,58,0.92),rgba(7,22,36,0.88));border:1px solid rgba(65,220,235,0.18);border-radius:20px;padding:24px;margin:12px 0;box-shadow:0 15px 40px rgba(0,0,0,0.28);}"
+        ".profile-card{background:linear-gradient(145deg,rgba(17,38,58,0.92),rgba(7,22,36,0.88));border:1px solid rgba(65,220,235,0.22);border-radius:20px;padding:24px;text-align:center;box-shadow:0 15px 40px rgba(0,0,0,0.28);}"
+        ".dx-hero{padding:40px 30px;border-radius:26px;text-align:center;background:linear-gradient(135deg,rgba(8,48,72,0.96),rgba(12,28,47,0.96));border:1px solid rgba(50,220,235,0.25);box-shadow:0 20px 50px rgba(0,0,0,0.35);margin-bottom:16px;}"
+        ".dx-hero-title{font-size:40px;font-weight:800;background:linear-gradient(90deg,#ffffff,#55e6ee,#ff7c96);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;}"
+        ".dx-hero-subtitle{color:#b9d9e8;font-size:17px;line-height:1.6;}"
+        ".stButton>button{border-radius:12px !important;border:1px solid rgba(50,220,235,0.30) !important;background:linear-gradient(135deg,#087f91,#0aa6ad) !important;color:white !important;font-weight:700 !important;min-height:44px;}"
+        'div[data-testid="stMetric"]{background:rgba(12,35,52,0.8);border:1px solid rgba(50,220,235,0.15);padding:15px;border-radius:15px;}'
+        ".dx-watermark{position:fixed;bottom:22px;right:28px;font-size:46px;font-weight:900;color:rgba(80,220,235,0.04);transform:rotate(-12deg);pointer-events:none;z-index:0;letter-spacing:3px;}"
+        '</style><div class="dx-watermark">DRUGXPERT AI</div>'
     )
     st.markdown(css, unsafe_allow_html=True)
 
 
-apply_premium_theme()
-
 if "custom_db" not in st.session_state:
-    st.session_state.custom_db = load_custom_db()
+    st.session_state.custom_db = load_json_file(DB_FILE, DEFAULT_DB)
+
 if "site_content" not in st.session_state:
-    st.session_state.site_content = load_site_content()
+    st.session_state.site_content = load_json_file(CONTENT_FILE, DEFAULT_CONTENT)
+
 if "role" not in st.session_state:
     st.session_state.role = None
     st.session_state.username = ""
 
 custom_db = st.session_state.custom_db
 content = st.session_state.site_content
+active_logo = get_active_logo(content)
+apply_premium_theme(active_logo)
 
 if st.session_state.role is None:
-    logo_b64 = image_to_base64(content.get("logo_file", ""))
-    logo_tag = f'<img src="{logo_b64}" style="width:90px;height:90px;object-fit:contain;margin-bottom:10px;">' if logo_b64 else ""
     st.markdown(
-        f'<div class="dx-hero">{logo_tag}'
+        f'<div class="dx-hero"><img src="{active_logo}" style="width:92px;height:92px;object-fit:contain;margin-bottom:10px;">'
         f'<div class="dx-hero-title">{content.get("welcome_title", "WELCOME TO DRUGXPERT AI")}</div>'
         f'<div class="dx-hero-subtitle">{content.get("welcome_subtitle", "")}</div></div>',
         unsafe_allow_html=True
     )
-    st.write("")
     c1, c2, c3 = st.columns([1, 1.4, 1])
     with c2:
         t1, t2 = st.tabs(["👤 Participant Login", "🛡️ Admin Login"])
@@ -208,13 +188,6 @@ if st.session_state.role is None:
                 if p_name.strip():
                     st.session_state.role = "participant"
                     st.session_state.username = p_name.strip()
-                    custom_db["logs"].insert(0, {
-                        "Name": p_name.strip(),
-                        "Department": p_dept.strip() or "General",
-                        "Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    })
-                    save_custom_db(custom_db)
+                    custom_db["logs"].insert(0, {"Name": p_name.strip(), "Department": p_dept.strip() or "General", "Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
+                    save_json_file(DB_FILE, custom_db)
                     st.rerun()
-                else:
-                    st.error("Please enter your name!")
-        with t2:
