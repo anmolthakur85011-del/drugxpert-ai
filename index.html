@@ -1,307 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DrugXpert AI - Computational Drug Formulation Platform</title>
-    <meta name="description" content="DrugXpert AI is an integrated computational platform for drug-excipient compatibility, solubility prediction, and solvent selection.">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-        body {
-            background-color: #f7f9fc;
-            color: #262730;
-            min-height: 100vh;
-        }
-        .hidden { display: none !important; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DrugXpert AI - Computational Drug Formulation Platform</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,sans-serif}
+body{background:#f4f7fb;color:#222}
+.hidden{display:none!important}
+#login-box{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0b4f6c,#087f8c);padding:20px}
+.lcard{background:#fff;width:100%;max-width:410px;border-radius:16px;padding:28px;box-shadow:0 12px 30px rgba(0,0,0,.2)}
+.lcard h1{color:#0b4f6c;text-align:center;font-size:26px;margin-bottom:4px}
+.lcard p{color:#666;text-align:center;font-size:13px;margin-bottom:18px}
+.tabs{display:flex;background:#eef2f7;border-radius:8px;padding:4px;margin-bottom:18px}
+.tab{flex:1;padding:9px;border:none;background:transparent;border-radius:6px;font-weight:600;cursor:pointer;color:#555}
+.tab.active{background:#fff;color:#0b4f6c;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
+.fg input,.fg select{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px}
+.btn{width:100%;padding:11px;background:#0b4f6c;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer}
+.btn:hover{background:#083b52}
+.btn-sm{padding:9px 16px;width:auto;font-size:14px}
+.btn-red{background:#d32f2f;padding:5px 10px;font-size:12px;width:auto}
+#app{display:flex;min-height:100vh}
+.side{width:255px;background:#eef2f7;padding:20px 15px;border-right:1px solid #dce3ec;display:flex;flex-direction:column;flex-shrink:0}
+.side h2{color:#0b4f6c;font-size:20px;margin-bottom:12px;cursor:pointer}
+.ubadge{background:#fff;padding:10px;border-radius:8px;border:1px solid #dce3ec;font-size:13px;margin-bottom:14px}
+.nbtn{display:block;width:100%;text-align:left;padding:10px 12px;margin-bottom:5px;border:none;border-radius:8px;background:transparent;font-size:14px;cursor:pointer;color:#222}
+.nbtn:hover{background:#dfe6f0}
+.nbtn.active{background:#0b4f6c;color:#fff;font-weight:600}
+.abtn{background:#fff3e0;color:#e65100;font-weight:600}
+.abtn.active{background:#e65100;color:#fff}
+.lout{margin-top:auto;padding:9px;background:#ffebee;color:#c62828;border:none;border-radius:8px;font-weight:600;cursor:pointer}
+.content{flex:1;padding:28px 36px;max-width:1100px;margin:0 auto}
+.hero{background:linear-gradient(135deg,#0b4f6c,#087f8c);color:#fff;padding:28px;border-radius:16px;margin-bottom:22px}
+.hero h1{font-size:32px;margin-bottom:6px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:16px 0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:14px 0}
+.card{background:#fff;padding:20px;border-radius:14px;border:1px solid #e2e8f0;cursor:pointer;transition:.2s}
+.card:hover{transform:translateY(-3px);border-color:#087f8c;box-shadow:0 6px 18px rgba(0,0,0,.08)}
+.card h3{color:#0b4f6c;margin-bottom:8px;font-size:18px}
+.card p{color:#555;font-size:14px;line-height:1.5;margin-bottom:10px}
+.mbox{background:#fff;padding:14px;border-radius:10px;border:1px solid #e2e8f0}
+.mbox span{font-size:12px;color:#666;display:block}
+.mbox strong{font-size:20px;color:#0b4f6c}
+.info{background:#e8f2fc;color:#004280;padding:14px;border-radius:10px;margin:12px 0;font-size:14px;cursor:pointer}
+.ok{background:#e6f4ea;color:#137333;padding:14px;border-radius:10px;margin:12px 0;font-size:14px;font-weight:600}
+table{width:100%;border-collapse:collapse;background:#fff;margin:12px 0;border-radius:8px;overflow:hidden}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid #eee;font-size:13px}
+th{background:#0b4f6c;color:#fff}
+.panel{background:#fff;padding:18px;border-radius:12px;border:1px solid #e2e8f0;margin-bottom:18px}
+.back{background:#e2e8f0;border:none;padding:7px 12px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:12px}
+@media(max-width:768px){#app{flex-direction:column}.side{width:100%}.content{padding:16px}}
+</style>
+</head>
+<body>
 
-        /* LOGIN SCREEN */
-        #login-screen {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #0b4f6c, #087f8c);
-            padding: 20px;
-        }
-        .login-card {
-            background: white;
-            width: 100%;
-            max-width: 430px;
-            border-radius: 18px;
-            padding: 32px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-        }
-        .login-header {
-            text-align: center;
-            margin-bottom: 22px;
-        }
-        .login-header h1 {
-            color: #0b4f6c;
-            font-size: 28px;
-            margin-bottom: 6px;
-        }
-        .login-header p {
-            color: #666;
-            font-size: 14px;
-        }
-        .tab-row {
-            display: flex;
-            background: #f0f2f6;
-            border-radius: 10px;
-            padding: 4px;
-            margin-bottom: 22px;
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            background: transparent;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #555;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .tab-btn.active {
-            background: white;
-            color: #0b4f6c;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-        .input-group {
-            margin-bottom: 16px;
-        }
-        .input-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 6px;
-        }
-        .input-group input, .input-group select {
-            width: 100%;
-            padding: 11px 14px;
-            border: 1px solid #ccd2de;
-            border-radius: 8px;
-            font-size: 15px;
-            outline: none;
-        }
-        .input-group input:focus, .input-group select:focus {
-            border-color: #087f8c;
-        }
-        .primary-btn {
-            width: 100%;
-            padding: 12px;
-            background: #0b4f6c;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .primary-btn:hover { background: #083b52; }
-        .error-msg {
-            color: #c62828;
-            background: #ffebee;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 13px;
-            margin-bottom: 14px;
-            text-align: center;
-        }
+<div id="login-box">
+  <div class="lcard">
+    <h1>💊 DrugXpert AI</h1>
+    <p>Computational Drug Formulation Platform</p>
+    <div class="tabs">
+      <button type="button" id="t-part" class="tab active" onclick="setTab('part')">👤 Participant</button>
+      <button type="button" id="t-adm" class="tab" onclick="setTab('adm')">🛡️ Admin</button>
+    </div>
+    <form id="f-part" onsubmit="doPartLogin(event)">
+      <div class="fg"><label>Your Full Name</label><input type="text" id="p-name" placeholder="Enter your name" required></div>
+      <div class="fg"><label>Department / Lab (Optional)</label><input type="text" id="p-dept" placeholder="e.g. Pharmaceutics"></div>
+      <button type="submit" class="btn">Enter Software →</button>
+    </form>
+    <form id="f-adm" class="hidden" onsubmit="doAdmLogin(event)">
+      <div class="fg"><label>Admin Username</label><input type="text" id="a-user" placeholder="admin" required></div>
+      <div class="fg"><label>Admin Password</label><input type="password" id="a-pass" placeholder="drugxpert123" required></div>
+      <button type="submit" class="btn">Login as Admin 🔒</button>
+    </form>
+  </div>
+</div>
 
-        /* APP LAYOUT */
-        #app-wrapper {
-            display: flex;
-            min-height: 100vh;
-        }
-        .sidebar {
-            width: 275px;
-            background-color: #f0f2f6;
-            padding: 22px 18px;
-            border-right: 1px solid #e0e4ec;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-        }
-        .sidebar h2 {
-            font-size: 22px;
-            color: #0b4f6c;
-            margin-bottom: 12px;
-            cursor: pointer;
-        }
-        .user-badge {
-            background: white;
-            border: 1px solid #dce1eb;
-            padding: 10px 12px;
-            border-radius: 10px;
-            font-size: 13px;
-            margin-bottom: 12px;
-        }
-        .user-badge strong { color: #0b4f6c; display: block; font-size: 14px; }
-        .divider {
-            border: 0;
-            border-top: 1px solid #d5dae5;
-            margin: 12px 0;
-        }
-        .nav-label {
-            font-size: 13px;
-            font-weight: 700;
-            color: #666;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
-        .nav-btn {
-            display: block;
-            width: 100%;
-            text-align: left;
-            padding: 11px 14px;
-            margin-bottom: 6px;
-            border: none;
-            border-radius: 8px;
-            background: transparent;
-            color: #262730;
-            font-size: 15px;
-            cursor: pointer;
-            transition: 0.15s;
-        }
-        .nav-btn:hover { background-color: #e2e6ee; }
-        .nav-btn.active {
-            background-color: #0b4f6c;
-            color: white;
-            font-weight: 600;
-        }
-        .admin-nav-btn {
-            background-color: #fff3e0;
-            color: #e65100;
-            font-weight: 600;
-            border: 1px solid #ffe0b2;
-        }
-        .admin-nav-btn.active {
-            background-color: #e65100;
-            color: white;
-        }
-        .logout-btn {
-            margin-top: auto;
-            padding: 10px;
-            background: #ffebee;
-            color: #c62828;
-            border: 1px solid #ffcdd2;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .logout-btn:hover { background: #ffcdd2; }
+<div id="app" class="hidden">
+  <div class="side">
+    <h2 onclick="go('home')">💊 DrugXpert AI</h2>
+    <div class="ubadge"><small id="u-role">Participant</small><br><strong id="u-name">User</strong></div>
+    <button type="button" id="b-home" class="nbtn active" onclick="go('home')">🏠 Home</button>
+    <button type="button" id="b-hsp" class="nbtn" onclick="go('hsp')">🧪 HSP Compatibility</button>
+    <button type="button" id="b-sol" class="nbtn" onclick="go('sol')">🤖 AI/ML Solubility</button>
+    <button type="button" id="b-slv" class="nbtn" onclick="go('slv')">🧴 Solvent Lookup</button>
+    <button type="button" id="b-int" class="nbtn" onclick="go('int')">🔗 Integrated Screening</button>
+    <button type="button" id="b-adm" class="nbtn abtn hidden" onclick="go('adm')">⚙️ Admin Control Panel</button>
+    <button type="button" class="lout" onclick="doLogout()">🚪 Logout</button>
+  </div>
 
-        /* MAIN CONTENT */
-        .main {
-            flex: 1;
-            padding: 32px 45px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .hero {
-            padding: 32px;
-            border-radius: 18px;
-            background: linear-gradient(135deg, #0b4f6c, #087f8c);
-            color: white;
-            margin-bottom: 25px;
-        }
-        .hero h1 { font-size: 36px; margin-bottom: 8px; }
-        .hero p { font-size: 17px; line-height: 1.5; }
+  <div class="content">
+    <div id="p-home" class="pg">
+      <div class="hero">
+        <h1 id="h-title">💊 DrugXpert AI</h1>
+        <p id="h-sub">Integrated Computational Platform for Drug–Excipient Compatibility, Solubility Prediction and Solvent Selection</p>
+      </div>
+      <h3>🔬 Core Modules (Click any card to open)</h3>
+      <div class="grid3">
+        <div class="card" onclick="go('hsp')"><h3>🧪 HSP Compatibility</h3><p>Hansen Solubility Parameter based screening using δD, δP, δH and Ra distance.</p><strong style="color:#087f8c">Open Module →</strong></div>
+        <div class="card" onclick="go('sol')"><h3>🤖 AI/ML Solubility</h3><p>Molecular descriptor-based prediction of LogS and solubility.</p><strong style="color:#087f8c">Open Module →</strong></div>
+        <div class="card" onclick="go('slv')"><h3>🧴 Solvent Lookup</h3><p>Lookup and ranking of suitable solvents for polymers and excipients.</p><strong style="color:#087f8c">Open Module →</strong></div>
+      </div>
+      <div class="info" onclick="go('int')"><strong>🔗 Click here for Integrated Screening:</strong> Drug → Excipient → HSP → Descriptors → Solubility → Solvent → Recommendation →</div>
+    </div>
 
-        h1.page-title { font-size: 30px; margin-bottom: 8px; color: #111; }
-        h2.section-title { font-size: 22px; margin: 18px 0 10px 0; }
-        h3.sub-title { font-size: 18px; margin: 16px 0 10px 0; color: #0b4f6c; }
-        p.desc { font-size: 15px; line-height: 1.6; color: #444; margin-bottom: 15px; }
+    <div id="p-hsp" class="pg hidden">
+      <button type="button" class="back" onclick="go('home')">← Back to Home</button>
+      <h2>🧪 HSP Compatibility Screening</h2><br>
+      <div class="fg" style="max-width:350px"><label>Select Drug</label><select id="hsp-d" onchange="calcHSP()"></select></div>
+      <div id="hsp-out" class="hidden">
+        <div class="grid3">
+          <div class="mbox"><span>δD</span><strong id="v-dd">-</strong></div>
+          <div class="mbox"><span>δP</span><strong id="v-dp">-</strong></div>
+          <div class="mbox"><span>δH</span><strong id="v-dh">-</strong></div>
+        </div>
+        <table><thead><tr><th>Excipient</th><th>δD / δP / δH</th><th>Ra Distance</th><th>Result</th></tr></thead><tbody id="hsp-tb"></tbody></table>
+      </div>
+    </div>
 
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin: 15px 0 22px 0; }
-        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin-bottom: 18px; }
-        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 18px; }
+    <div id="p-sol" class="pg hidden">
+      <button type="button" class="back" onclick="go('home')">← Back to Home</button>
+      <h2>🤖 AI/ML Solubility Prediction</h2><br>
+      <div class="grid2">
+        <div class="fg"><label>Select Drug</label><select id="sol-d" onchange="showDesc()"></select></div>
+        <div class="fg"><label>Select Excipient</label><select id="sol-e"></select></div>
+      </div>
+      <div class="grid4">
+        <div class="mbox"><span>LogP</span><strong id="d-lp">-</strong></div>
+        <div class="mbox"><span>Mol. Weight</span><strong id="d-mw">-</strong></div>
+        <div class="mbox"><span>Rotatable Bonds</span><strong id="d-rt">-</strong></div>
+        <div class="mbox"><span>Aromatic Prop.</span><strong id="d-ar">-</strong></div>
+      </div>
+      <button type="button" class="btn btn-sm" onclick="calcSol()">Predict Solubility</button>
+      <div id="sol-out" class="ok hidden"></div>
+    </div>
 
-        .card {
-            padding: 22px;
-            border-radius: 16px;
-            background-color: white;
-            border: 1px solid #e5e9f0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(11, 79, 108, 0.14);
-            border-color: #087f8c;
-        }
-        .card h3 { color: #0b4f6c; margin-bottom: 8px; font-size: 19px; }
-        .card p { color: #555; line-height: 1.5; font-size: 14px; margin-bottom: 12px; }
-        .card-link { color: #087f8c; font-weight: 600; font-size: 14px; }
+    <div id="p-slv" class="pg hidden">
+      <button type="button" class="back" onclick="go('home')">← Back to Home</button>
+      <h2>🧴 Solvent Lookup</h2><br>
+      <div class="fg" style="max-width:350px"><label>Select Polymer / Excipient</label><select id="slv-p" onchange="calcSlv()"></select></div>
+      <div id="slv-out" class="hidden"><table><thead><tr><th>Rank</th><th>Solvent</th><th>Status</th></tr></thead><tbody id="slv-tb"></tbody></table></div>
+    </div>
 
-        .alert-info { background: #e8f2fc; color: #004280; padding: 15px 18px; border-radius: 10px; margin: 14px 0; font-size: 14px; line-height: 1.5; }
-        .alert-success { background: #e6f4ea; color: #137333; padding: 15px 18px; border-radius: 10px; margin: 14px 0; font-size: 14px; font-weight: 600; }
-        .clickable-banner { cursor: pointer; border: 1px solid #cce0f5; }
-        .clickable-banner:hover { background: #dcebfa; }
-
-        .action-btn {
-            background-color: #0b4f6c;
-            color: white;
-            border: none;
-            padding: 11px 20px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .action-btn:hover { background-color: #083b52; }
-        .danger-btn {
-            background: #d32f2f;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-        }
-        .back-btn {
-            background: #e2e6ee;
-            color: #262730;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-bottom: 14px;
-        }
-
-        .metric-box { background: white; padding: 16px; border-radius: 12px; border: 1px solid #e5e9f0; }
-        .metric-label { font-size: 13px; color: #666; margin-bottom: 5px; }
-        .metric-val { font-size: 24px; font-weight: 700; color: #0b4f6c; }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 14px 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        th, td {
-            padding: 12px 14px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-            font-size: 14px;
-        }
-        th { background-color: #0b4f6c; color: white; }
+    <div id="p-int" class="pg hidden">
+      <button type="button" class="back" onclick="go('home')">← Back to Home</button>
+      <h2>🔗 Integrated Screening</h2><br>
+      
