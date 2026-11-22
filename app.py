@@ -255,136 +255,210 @@ if st.session_state.role is None:
                 else:
                     st.error("Please enter your name to continue.")
 
-       with tab_admin:
-    if st.session_state.role == "admin":
+with tab_admin:
 
-        st.success("🔐 Administrator Control Panel")
+            if st.session_state.role == "admin":
 
-        st.markdown("### 🎨 Software Appearance")
+                st.success("🔐 Administrator Control Panel")
 
-        c1, c2 = st.columns(2)
+                # =================================================
+                # SOFTWARE APPEARANCE
+                # =================================================
+                st.markdown("### 🎨 Software Appearance")
 
-        with c1:
-            new_title = st.text_input(
-                "Software Name",
-                value=db.get("title", "💊 DrugXpert AI")
-            )
+                c1, c2 = st.columns(2)
 
-            new_subtitle = st.text_area(
-                "Software Subtitle",
-                value=db.get(
-                    "subtitle",
-                    "Integrated Computational Platform for Drug-Excipient Compatibility, Solubility Prediction and Solvent Selection"
-                )
-            )
+                with c1:
+                    new_title = st.text_input(
+                        "Software Name",
+                        value=db.get(
+                            "title",
+                            "💊 DrugXpert AI"
+                        )
+                    )
 
-        with c2:
-            new_welcome = st.text_input(
-                "Welcome Message",
-                value=db.get("welcome", "Welcome to DrugXpert AI")
-            )
+                    new_subtitle = st.text_area(
+                        "Software Subtitle",
+                        value=db.get(
+                            "subtitle",
+                            "Integrated Computational Platform for Drug–Excipient Compatibility, Solubility Prediction and Solvent Selection"
+                        ),
+                        height=100
+                    )
 
-            new_about = st.text_area(
-                "About the Software",
-                value=db.get(
-                    "about",
-                    "DrugXpert AI is an integrated computational platform developed for pharmaceutical research and rational drug-excipient selection."
-                ),
-                height=120
-            )
+                    new_welcome = st.text_input(
+                        "Welcome Message",
+                        value=db.get(
+                            "welcome",
+                            "WELCOME TO DRUGXPERT AI"
+                        )
+                    )
 
-        st.markdown("---")
+                with c2:
+                    new_about = st.text_area(
+                        "About the Software",
+                        value=db.get(
+                            "about",
+                            "DrugXpert AI is an integrated computational platform designed for pharmaceutical research, drug–excipient compatibility assessment, solubility prediction, Hansen Solubility Parameter analysis and rational excipient selection."
+                        ),
+                        height=150
+                    )
 
-        st.markdown("### 👨‍🔬 Developer / Guide Information")
+                st.markdown("---")
 
-        g1, g2 = st.columns(2)
+                # =================================================
+                # DEVELOPER PROFILE
+                # =================================================
+                st.markdown("### 👨‍🔬 Developer Profile")
 
-        with g1:
-            guide_name = st.text_input(
-                "Guide Name",
-                value=db.get("guide_name", "")
-            )
+                d1, d2 = st.columns(2)
 
-            guide_info = st.text_area(
-                "Guide Information",
-                value=db.get("guide_info", ""),
-                height=120
-            )
+                with d1:
+                    developer_name = st.text_input(
+                        "Developer Name",
+                        value=db.get(
+                            "developer_name",
+                            "Anmol Rajan"
+                        )
+                    )
 
-        with g2:
-            developer_name = st.text_input(
-                "Your Name",
-                value=db.get("developer_name", "")
-            )
+                    developer_role = st.text_input(
+                        "Developer Role",
+                        value=db.get(
+                            "developer_role",
+                            "M.Pharm (Pharmaceutics) Research Scholar"
+                        )
+                    )
 
-            developer_info = st.text_area(
-                "Your Information",
-                value=db.get("developer_info", ""),
-                height=120
-            )
+                with d2:
+                    developer_info = st.text_area(
+                        "Developer Short Bio",
+                        value=db.get(
+                            "developer_info",
+                            "Researcher working in pharmaceutics, computational drug delivery, AI/ML-assisted excipient selection and cyclodextrin-based drug delivery systems."
+                        ),
+                        height=120
+                    )
 
-        st.markdown("---")
+                st.markdown("---")
 
-        st.markdown("### 💾 Save Changes")
+                # =================================================
+                # GUIDE PROFILE
+                # =================================================
+                st.markdown("### 👨‍🏫 Guide Profile")
 
-        if st.button(
-            "💾 Save Website / Software Information",
-            type="primary",
-            use_container_width=True
-        ):
+                g1, g2 = st.columns(2)
 
-            db["title"] = new_title
-            db["subtitle"] = new_subtitle
-            db["welcome"] = new_welcome
-            db["about"] = new_about
-            db["guide_name"] = guide_name
-            db["guide_info"] = guide_info
-            db["developer_name"] = developer_name
-            db["developer_info"] = developer_info
+                with g1:
+                    guide_name = st.text_input(
+                        "Guide Name",
+                        value=db.get(
+                            "guide_name",
+                            ""
+                        )
+                    )
 
-            save_db(db)
+                    guide_role = st.text_input(
+                        "Guide Role",
+                        value=db.get(
+                            "guide_role",
+                            "Professor / Research Guide"
+                        )
+                    )
 
-            st.success("✅ Changes saved successfully!")
-            st.rerun()
+                with g2:
+                    guide_info = st.text_area(
+                        "Guide Short Bio",
+                        value=db.get(
+                            "guide_info",
+                            "Research guide working in pharmaceutics, formulation development and advanced drug delivery research."
+                        ),
+                        height=120
+                    )
 
-        st.markdown("---")
+                st.markdown("---")
 
-        if st.button("🚪 Logout", use_container_width=True):
-            st.session_state.role = None
-            st.session_state.username = ""
-            st.rerun()
+                # =================================================
+                # SAVE
+                # =================================================
+                st.markdown("### 💾 Save Changes")
 
-    else:
+                if st.button(
+                    "💾 Save Website / Software Information",
+                    type="primary",
+                    use_container_width=True
+                ):
 
-        st.subheader("Administrator Control Login")
+                    db["title"] = new_title
+                    db["subtitle"] = new_subtitle
+                    db["welcome"] = new_welcome
+                    db["about"] = new_about
 
-        a_user = st.text_input(
-            "Admin Username",
-            placeholder="Enter admin username"
-        )
+                    db["developer_name"] = developer_name
+                    db["developer_role"] = developer_role
+                    db["developer_info"] = developer_info
 
-        a_pass = st.text_input(
-            "Admin Password",
-            type="password",
-            placeholder="Enter admin password"
-        )
+                    db["guide_name"] = guide_name
+                    db["guide_role"] = guide_role
+                    db["guide_info"] = guide_info
 
-        if st.button(
-            "🔐 Login as Admin",
-            type="primary",
-            use_container_width=True
-        ):
+                    save_db(db)
 
-            if (
-                a_user.strip() == ADMIN_USERNAME
-                and a_pass == ADMIN_PASSWORD
-            ):
-                st.session_state.role = "admin"
-                st.session_state.username = f"Admin ({a_user.strip()})"
-                st.rerun()
+                    st.success(
+                        "✅ Changes saved successfully!"
+                    )
+
+                    st.rerun()
+
+                st.markdown("---")
+
+                # =================================================
+                # LOGOUT
+                # =================================================
+                if st.button(
+                    "🚪 Logout",
+                    use_container_width=True
+                ):
+                    st.session_state.role = None
+                    st.session_state.username = ""
+                    st.session_state.current_page = "Home"
+                    st.rerun()
 
             else:
-                st.error("❌ Invalid Admin Username or Password!")
+
+                st.subheader("Administrator Control Login")
+
+                a_user = st.text_input(
+                    "Admin Username",
+                    placeholder="Enter admin username"
+                )
+
+                a_pass = st.text_input(
+                    "Admin Password",
+                    type="password",
+                    placeholder="Enter admin password"
+                )
+
+                if st.button(
+                    "🔐 Login as Admin",
+                    type="primary",
+                    use_container_width=True
+                ):
+
+                    if (
+                        a_user.strip() == ADMIN_USERNAME
+                        and a_pass == ADMIN_PASSWORD
+                    ):
+                        st.session_state.role = "admin"
+                        st.session_state.username = (
+                            f"Admin ({a_user.strip()})"
+                        )
+                        st.rerun()
+
+                    else:
+                        st.error(
+                            "❌ Invalid Admin Username or Password!"
+                        )
 
 st.stop()
 
