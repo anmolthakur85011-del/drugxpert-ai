@@ -505,9 +505,11 @@ with st.sidebar:
 page = st.session_state.current_page
 
 # -------------------------------------------------
+# -------------------------------------------------
 # 1. HOME PAGE
 # -------------------------------------------------
 if page == "Home":
+
     st.markdown(f"""
     <div class="hero">
         <h1>{db['title']}</h1>
@@ -515,7 +517,19 @@ if page == "Home":
     </div>
     """, unsafe_allow_html=True)
 
+    st.markdown("""
+    <div class="dx-welcome">
+        <h1>WELCOME TO DRUGXPERT AI</h1>
+        <p>
+            Integrated computational platform for drug–excipient
+            compatibility, solubility prediction, HSP analysis and
+            rational excipient selection.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
     st.markdown("## Welcome to DrugXpert AI")
+
     st.write(
         "DrugXpert AI is designed to support rational drug formulation "
         "development using computational screening, molecular descriptors, "
@@ -523,16 +537,25 @@ if page == "Home":
     )
 
     st.markdown("### 🔬 Three Core Modules")
+
     col1, col2, col3 = st.columns(3)
 
     with col1:
         st.markdown("""
         <div class="card">
             <h3>🧪 HSP Compatibility</h3>
-            <p>Hansen Solubility Parameter based screening of drug–excipient compatibility using δD, δP, δH and Hansen distance (Ra).</p>
+            <p>
+                Hansen Solubility Parameter based screening of
+                drug–excipient compatibility using δD, δP, δH
+                and Hansen distance (Ra).
+            </p>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Open HSP Compatibility →", use_container_width=True):
+
+        if st.button(
+            "Open HSP Compatibility →",
+            use_container_width=True
+        ):
             st.session_state.current_page = "HSP Compatibility"
             st.rerun()
 
@@ -540,10 +563,18 @@ if page == "Home":
         st.markdown("""
         <div class="card">
             <h3>🤖 AI/ML Solubility</h3>
-            <p>Molecular descriptor-based prediction of LogS and solubility for drug–excipient systems using machine learning models.</p>
+            <p>
+                Molecular descriptor-based prediction of LogS
+                and solubility for drug–excipient systems using
+                machine learning models.
+            </p>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Open AI/ML Solubility →", use_container_width=True):
+
+        if st.button(
+            "Open AI/ML Solubility →",
+            use_container_width=True
+        ):
             st.session_state.current_page = "AI/ML Solubility"
             st.rerun()
 
@@ -551,22 +582,40 @@ if page == "Home":
         st.markdown("""
         <div class="card">
             <h3>🧴 Solvent Lookup</h3>
-            <p>Computational lookup and ranking of suitable solvents for selected polymers and excipients.</p>
+            <p>
+                Computational lookup and ranking of suitable
+                solvents for selected polymers and excipients.
+            </p>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Open Solvent Lookup →", use_container_width=True):
+
+        if st.button(
+            "Open Solvent Lookup →",
+            use_container_width=True
+        ):
             st.session_state.current_page = "Solvent Lookup"
             st.rerun()
 
     st.markdown("---")
+
     st.markdown("## 🔗 Integrated Screening")
+
     st.info(
         "Drug → Excipient → HSP Compatibility → Molecular Descriptor Analysis "
         "→ AI/ML Solubility Prediction → Solvent Selection → Final Recommendation"
     )
-    if st.button("Launch Integrated Screening →", type="primary"):
+
+    if st.button(
+        "Launch Integrated Screening →",
+        type="primary"
+    ):
         st.session_state.current_page = "Integrated Screening"
         st.rerun()
+
+
+# -------------------------------------------------
+# 2. HSP MODULE
+# -------------------------------------------------
 
 # -------------------------------------------------
 # 2. HSP MODULE
