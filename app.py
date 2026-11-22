@@ -112,7 +112,7 @@ def get_active_logo(content):
 def image_html(data_uri, width=120, height=120):
     if not data_uri:
         return ""
-    return f'<img src="{data_uri}" style="width:{width}px;height:{height}px;object-fit:cover;border-radius:50%;border:3px solid #55e6ee;box-shadow:0 8px 25px rgba(0,0,0,0.3);margin-bottom:10px;">'
+    return f'<img src="{data_uri}" style="width:{width}px;height:{height}px;object-fit:cover;border-radius:50%;border:3px solid #55e6ee;margin-bottom:10px;">'
 
 
 def hsp_distance(d1, d2):
@@ -138,19 +138,18 @@ def screening_log_s(drug, ra):
 def apply_premium_theme(logo_uri):
     css = (
         "<style>"
-        ".stApp{background:linear-gradient(135deg,#07121f 0%,#0a1928 50%,#07111d 100%);color:#f5f9ff;}"
-        f'.stApp::before{{content:"";position:fixed;top:52%;left:54%;transform:translate(-50%,-50%);width:420px;height:420px;background-image:url("{logo_uri}");background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.045;pointer-events:none;z-index:0;}}'
-        'section[data-testid="stSidebar"]{background:linear-gradient(180deg,#06101c 0%,#091c2b 100%);border-right:1px solid rgba(0,210,230,0.18);}'
-        'section[data-testid="stSidebar"] *{color:#eaf7ff !important;}'
-        "h1,h2,h3{color:#ffffff !important;}"
-        ".dx-card,.card{background:linear-gradient(145deg,rgba(17,38,58,0.92),rgba(7,22,36,0.88));border:1px solid rgba(65,220,235,0.18);border-radius:20px;padding:24px;margin:12px 0;box-shadow:0 15px 40px rgba(0,0,0,0.28);}"
-        ".profile-card{background:linear-gradient(145deg,rgba(17,38,58,0.92),rgba(7,22,36,0.88));border:1px solid rgba(65,220,235,0.22);border-radius:20px;padding:24px;text-align:center;box-shadow:0 15px 40px rgba(0,0,0,0.28);}"
-        ".dx-hero{padding:40px 30px;border-radius:26px;text-align:center;background:linear-gradient(135deg,rgba(8,48,72,0.96),rgba(12,28,47,0.96));border:1px solid rgba(50,220,235,0.25);box-shadow:0 20px 50px rgba(0,0,0,0.35);margin-bottom:16px;}"
-        ".dx-hero-title{font-size:40px;font-weight:800;background:linear-gradient(90deg,#ffffff,#55e6ee,#ff7c96);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;}"
-        ".dx-hero-subtitle{color:#b9d9e8;font-size:17px;line-height:1.6;}"
-        ".stButton>button{border-radius:12px !important;border:1px solid rgba(50,220,235,0.30) !important;background:linear-gradient(135deg,#087f91,#0aa6ad) !important;color:white !important;font-weight:700 !important;min-height:44px;}"
-        'div[data-testid="stMetric"]{background:rgba(12,35,52,0.8);border:1px solid rgba(50,220,235,0.15);padding:15px;border-radius:15px;}'
-        ".dx-watermark{position:fixed;bottom:22px;right:28px;font-size:46px;font-weight:900;color:rgba(80,220,235,0.04);transform:rotate(-12deg);pointer-events:none;z-index:0;letter-spacing:3px;}"
+        ".stApp{background-color:#07121f;color:#ffffff;}"
+        f'.stApp::before{{content:"";position:fixed;top:52%;left:54%;transform:translate(-50%,-50%);width:400px;height:400px;background-image:url("{logo_uri}");background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.05;pointer-events:none;z-index:0;}}'
+        'section[data-testid="stSidebar"]{background-color:#06101c;border-right:1px solid rgba(85,230,238,0.2);}'
+        "h1,h2,h3,h4,p,label,span{color:#f0f8ff !important;}"
+        ".dx-card,.card{background:#0d2238;border:1px solid rgba(85,230,238,0.28);border-radius:18px;padding:22px;margin:10px 0;}"
+        ".profile-card{background:#0d2238;border:1px solid rgba(85,230,238,0.28);border-radius:18px;padding:22px;text-align:center;}"
+        ".dx-hero{padding:34px 26px;border-radius:22px;text-align:center;background:#0a2a44;border:1px solid rgba(85,230,238,0.35);margin-bottom:16px;}"
+        ".dx-hero-title{font-size:36px;font-weight:800;color:#55e6ee !important;margin-bottom:8px;}"
+        ".dx-hero-subtitle{color:#d0e8f5 !important;font-size:16px;}"
+        ".stButton>button{border-radius:10px !important;border:1px solid #55e6ee !important;background:#087f91 !important;color:#ffffff !important;font-weight:700 !important;}"
+        'div[data-testid="stMetric"]{background:#0d2238;border:1px solid rgba(85,230,238,0.25);padding:14px;border-radius:14px;}'
+        ".dx-watermark{position:fixed;bottom:20px;right:26px;font-size:42px;font-weight:900;color:rgba(85,230,238,0.05);transform:rotate(-12deg);pointer-events:none;z-index:0;}"
         '</style><div class="dx-watermark">DRUGXPERT AI</div>'
     )
     st.markdown(css, unsafe_allow_html=True)
@@ -166,6 +165,9 @@ if "role" not in st.session_state:
     st.session_state.role = None
     st.session_state.username = ""
 
+if "page" not in st.session_state:
+    st.session_state.page = "Home"
+
 custom_db = st.session_state.custom_db
 content = st.session_state.site_content
 active_logo = get_active_logo(content)
@@ -173,7 +175,7 @@ apply_premium_theme(active_logo)
 
 if st.session_state.role is None:
     st.markdown(
-        f'<div class="dx-hero"><img src="{active_logo}" style="width:92px;height:92px;object-fit:contain;margin-bottom:10px;">'
+        f'<div class="dx-hero"><img src="{active_logo}" style="width:90px;height:90px;object-fit:contain;margin-bottom:8px;">'
         f'<div class="dx-hero-title">{content.get("welcome_title", "WELCOME TO DRUGXPERT AI")}</div>'
         f'<div class="dx-hero-subtitle">{content.get("welcome_subtitle", "")}</div></div>',
         unsafe_allow_html=True
@@ -184,10 +186,20 @@ if st.session_state.role is None:
         with t1:
             p_name = st.text_input("Enter Your Full Name *", placeholder="e.g. Rahul Sharma")
             p_dept = st.text_input("Department / Lab (Optional)", placeholder="e.g. Pharmaceutics")
-            if st.button("Enter Software →", type="primary", use_container_width=True):
+            if st.button("Enter Software →", use_container_width=True):
                 if p_name.strip():
                     st.session_state.role = "participant"
                     st.session_state.username = p_name.strip()
+                    st.session_state.page = "Home"
                     custom_db["logs"].insert(0, {"Name": p_name.strip(), "Department": p_dept.strip() or "General", "Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
                     save_json_file(DB_FILE, custom_db)
                     st.rerun()
+                else:
+                    st.error("Please enter your name!")
+        with t2:
+            u = st.text_input("Admin Username", placeholder="admin")
+            p = st.text_input("Admin Password", type="password", placeholder="Enter password")
+            if st.button("Login as Admin 🔒", use_container_width=True):
+                if u.strip() == ADMIN_USERNAME and p == ADMIN_PASSWORD:
+                    st.session_state.role = "admin"
+                    st.session_state.username = f"Admin ({u.strip()})"
