@@ -37,27 +37,21 @@ DEFAULT_SVG_LOGO = """
       <stop offset="100%" stop-color="#163b5c"/>
     </linearGradient>
   </defs>
-  <!-- Outer AI Hexagonal Ring -->
   <polygon points="110,12 195,61 195,159 110,208 25,159 25,61"
            fill="url(#dxGrad2)" stroke="url(#dxGrad1)" stroke-width="5"/>
-  <!-- Inner Neural Orbit -->
   <circle cx="110" cy="110" r="68" fill="none" stroke="#55e6ee" stroke-width="1.5" stroke-dasharray="6 5" opacity="0.7"/>
-  <!-- Molecular Benzene Ring Left -->
   <polygon points="78,76 98,64 118,76 118,99 98,111 78,99"
            fill="none" stroke="#55e6ee" stroke-width="3"/>
-  <!-- Pharmaceutical Capsule Right -->
   <g transform="translate(128,118) rotate(-38)">
     <rect x="-28" y="-13" width="56" height="26" rx="13" fill="none" stroke="#ff7c96" stroke-width="3.5"/>
     <path d="M 0,-13 L 15,-13 A 13,13 0 0 1 15,13 L 0,13 Z" fill="#ff7c96" opacity="0.85"/>
   </g>
-  <!-- AI Neural Nodes -->
   <circle cx="78" cy="76" r="4.5" fill="#ffffff"/>
   <circle cx="98" cy="64" r="4.5" fill="#55e6ee"/>
   <circle cx="118" cy="76" r="4.5" fill="#55e6ee"/>
   <circle cx="78" cy="99" r="4.5" fill="#55e6ee"/>
   <circle cx="98" cy="111" r="5" fill="#ff7c96"/>
   <line x1="98" y1="111" x2="116" y2="118" stroke="#ffffff" stroke-width="2" stroke-dasharray="3 2"/>
-  <!-- Monogram -->
   <text x="110" y="176" text-anchor="middle" fill="#eaf7ff" font-family="sans-serif" font-size="16" font-weight="800" letter-spacing="2">DX·AI</text>
 </svg>
 """.strip()
@@ -151,64 +145,37 @@ DEFAULT_DATA = {
             "dD": 18.8,
             "dP": 10.2,
             "dH": 11.5,
-            "solvents": [
-                "Water",
-                "Ethanol",
-                "Methanol",
-                "Dichloromethane"
-            ]
+            "solvents": ["Water", "Ethanol", "Methanol", "Dichloromethane"]
         },
         "Soluplus": {
             "dD": 18.1,
             "dP": 8.6,
             "dH": 9.8,
-            "solvents": [
-                "Ethanol",
-                "Acetone",
-                "Methanol",
-                "Dimethylformamide"
-            ]
+            "solvents": ["Ethanol", "Acetone", "Methanol", "Dimethylformamide"]
         },
         "PEG 6000": {
             "dD": 17.9,
             "dP": 9.1,
             "dH": 11.0,
-            "solvents": [
-                "Water",
-                "Ethanol",
-                "Chloroform",
-                "Acetonitrile"
-            ]
+            "solvents": ["Water", "Ethanol", "Chloroform", "Acetonitrile"]
         },
         "Poloxamer 188": {
             "dD": 17.5,
             "dP": 7.4,
             "dH": 9.5,
-            "solvents": [
-                "Water",
-                "Ethanol",
-                "Isopropanol"
-            ]
+            "solvents": ["Water", "Ethanol", "Isopropanol"]
         },
         "Poloxamer 407": {
             "dD": 17.6,
             "dP": 7.2,
             "dH": 9.1,
-            "solvents": [
-                "Water",
-                "Ethanol",
-                "Methanol"
-            ]
+            "solvents": ["Water", "Ethanol", "Methanol"]
         },
         "HPMC": {
             "dD": 18.4,
             "dP": 9.5,
             "dH": 13.2,
-            "solvents": [
-                "Water",
-                "Ethanol-Water Mixture",
-                "Dichloromethane-Methanol"
-            ]
+            "solvents": ["Water", "Ethanol-Water Mixture", "Dichloromethane-Methanol"]
         }
     },
     "logs": []
@@ -250,12 +217,7 @@ def file_to_b64(uploaded_file):
         return ""
     raw = uploaded_file.getvalue()
     mime = uploaded_file.type or "image/png"
-    return (
-        "data:"
-        + mime
-        + ";base64,"
-        + base64.b64encode(raw).decode("utf-8")
-    )
+    return "data:" + mime + ";base64," + base64.b64encode(raw).decode("utf-8")
 
 
 def get_active_logo(db):
@@ -298,6 +260,24 @@ def compatibility_label(ra):
         return "Moderate Compatibility (Borderline / Screen Further)"
     else:
         return "Poor Compatibility (Immiscible / Low Affinity)"
-        
 
 
+def screening_log_s(drug, excipient_or_ra, ra=None):
+    actual_ra = float(excipient_or_ra) if ra is None else float(ra)
+    base = 1.0 / (1.0 + actual_ra)
+    return round(-2.0 + (base * 4.0), 3)
+
+
+# =========================================================
+# PREMIUM SCIENTIFIC THEME & WATERMARK STYLING
+# =========================================================
+
+def apply_premium_ui(db):
+    logo_uri = get_active_logo(db)
+    app_title = db.get("title", "DrugXpert AI")
+
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background:
