@@ -220,16 +220,29 @@ def image_html(
         'rgba(15,23,42,.18);">'
     )
 
-
-def hsp_distance(
-    drug,
-    excipient
-):
-
+def hsp_distance(d1, d2):
     return math.sqrt(
-        4 * (
-            drug["dD"]
-            - excipient["dD"]
+        4 * (d1["dD"] - d2["dD"]) ** 2
+        + (d1["dP"] - d2["dP"]) ** 2
+        + (d1["dH"] - d2["dH"]) ** 2
+    )
+
+
+def compatibility_label(ra):
+    if ra <= 3:
+        return "Excellent Compatibility"
+    elif ra <= 5:
+        return "Good Compatibility"
+    elif ra <= 7:
+        return "Moderate Compatibility"
+    else:
+        return "Poor Compatibility"
+
+
+def screening_log_s(drug, excipient, ra):
+    base = 1.0 / (1.0 + ra)
+    return round(-2.0 + (base * 4.0), 3)
+
         ) ** 2# =========================================================
 # AI/ML SOLUBILITY
 # =========================================================
