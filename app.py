@@ -287,3 +287,4 @@ elif page == "HSP Compatibility":
     drug = st.selectbox("Select Drug", drug_list)
 
     if drug != "Select drug":
+        d = db["drugs"][drug]
