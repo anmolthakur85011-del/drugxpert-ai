@@ -3,148 +3,2506 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DrugXpert AI - Computational Drug Formulation Platform</title>
+
+<title>DrugXpert AI</title>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,sans-serif}
-body{background:#f4f7fb;color:#222}
-.hidden{display:none!important}
-#login-box{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0b4f6c,#087f8c);padding:20px}
-.lcard{background:#fff;width:100%;max-width:410px;border-radius:16px;padding:28px;box-shadow:0 12px 30px rgba(0,0,0,.2)}
-.lcard h1{color:#0b4f6c;text-align:center;font-size:26px;margin-bottom:4px}
-.lcard p{color:#666;text-align:center;font-size:13px;margin-bottom:18px}
-.tabs{display:flex;background:#eef2f7;border-radius:8px;padding:4px;margin-bottom:18px}
-.tab{flex:1;padding:9px;border:none;background:transparent;border-radius:6px;font-weight:600;cursor:pointer;color:#555}
-.tab.active{background:#fff;color:#0b4f6c;box-shadow:0 2px 6px rgba(0,0,0,.08)}
-.fg{margin-bottom:14px}
-.fg label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
-.fg input,.fg select{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px}
-.btn{width:100%;padding:11px;background:#0b4f6c;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer}
-.btn:hover{background:#083b52}
-.btn-sm{padding:9px 16px;width:auto;font-size:14px}
-.btn-red{background:#d32f2f;padding:5px 10px;font-size:12px;width:auto}
-#app{display:flex;min-height:100vh}
-.side{width:255px;background:#eef2f7;padding:20px 15px;border-right:1px solid #dce3ec;display:flex;flex-direction:column;flex-shrink:0}
-.side h2{color:#0b4f6c;font-size:20px;margin-bottom:12px;cursor:pointer}
-.ubadge{background:#fff;padding:10px;border-radius:8px;border:1px solid #dce3ec;font-size:13px;margin-bottom:14px}
-.nbtn{display:block;width:100%;text-align:left;padding:10px 12px;margin-bottom:5px;border:none;border-radius:8px;background:transparent;font-size:14px;cursor:pointer;color:#222}
-.nbtn:hover{background:#dfe6f0}
-.nbtn.active{background:#0b4f6c;color:#fff;font-weight:600}
-.abtn{background:#fff3e0;color:#e65100;font-weight:600}
-.abtn.active{background:#e65100;color:#fff}
-.lout{margin-top:auto;padding:9px;background:#ffebee;color:#c62828;border:none;border-radius:8px;font-weight:600;cursor:pointer}
-.content{flex:1;padding:28px 36px;max-width:1100px;margin:0 auto}
-.hero{background:linear-gradient(135deg,#0b4f6c,#087f8c);color:#fff;padding:28px;border-radius:16px;margin-bottom:22px}
-.hero h1{font-size:32px;margin-bottom:6px}
-.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:16px 0}
-.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:14px 0}
-.card{background:#fff;padding:20px;border-radius:14px;border:1px solid #e2e8f0;cursor:pointer;transition:.2s}
-.card:hover{transform:translateY(-3px);border-color:#087f8c;box-shadow:0 6px 18px rgba(0,0,0,.08)}
-.card h3{color:#0b4f6c;margin-bottom:8px;font-size:18px}
-.card p{color:#555;font-size:14px;line-height:1.5;margin-bottom:10px}
-.mbox{background:#fff;padding:14px;border-radius:10px;border:1px solid #e2e8f0}
-.mbox span{font-size:12px;color:#666;display:block}
-.mbox strong{font-size:20px;color:#0b4f6c}
-.info{background:#e8f2fc;color:#004280;padding:14px;border-radius:10px;margin:12px 0;font-size:14px;cursor:pointer}
-.ok{background:#e6f4ea;color:#137333;padding:14px;border-radius:10px;margin:12px 0;font-size:14px;font-weight:600}
-table{width:100%;border-collapse:collapse;background:#fff;margin:12px 0;border-radius:8px;overflow:hidden}
-th,td{padding:10px 12px;text-align:left;border-bottom:1px solid #eee;font-size:13px}
-th{background:#0b4f6c;color:#fff}
-.panel{background:#fff;padding:18px;border-radius:12px;border:1px solid #e2e8f0;margin-bottom:18px}
-.back{background:#e2e8f0;border:none;padding:7px 12px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:12px}
-@media(max-width:768px){#app{flex-direction:column}.side{width:100%}.content{padding:16px}}
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+    color:#172033;
+}
+
+button{
+    cursor:pointer;
+    border:none;
+}
+
+.app{
+    display:flex;
+    min-height:100vh;
+}
+
+/* SIDEBAR */
+.sidebar{
+    width:250px;
+    background:#101828;
+    color:white;
+    padding:24px 18px;
+    position:fixed;
+    top:0;
+    left:0;
+    bottom:0;
+}
+
+.logo{
+    font-size:23px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.logo span{
+    color:#35c98b;
+}
+
+.logo-sub{
+    color:#98a2b3;
+    font-size:12px;
+    margin-bottom:35px;
+}
+
+.nav-title{
+    color:#667085;
+    font-size:11px;
+    font-weight:bold;
+    margin:18px 10px 10px;
+    text-transform:uppercase;
+}
+
+.nav-btn{
+    width:100%;
+    padding:13px 14px;
+    margin-bottom:7px;
+    background:transparent;
+    color:#d0d5dd;
+    text-align:left;
+    border-radius:8px;
+    font-size:14px;
+}
+
+.nav-btn:hover,
+.nav-btn.active{
+    background:#1d2939;
+    color:#35c98b;
+}
+
+/* MAIN */
+.main{
+    margin-left:250px;
+    width:calc(100% - 250px);
+}
+
+.topbar{
+    background:white;
+    padding:20px 30px;
+    border-bottom:1px solid #e4e7ec;
+}
+
+.topbar h1{
+    font-size:24px;
+}
+
+.topbar p{
+    color:#667085;
+    margin-top:5px;
+    font-size:13px;
+}
+
+.content{
+    padding:30px;
+}
+
+/* PAGE */
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+/* CARDS */
+.card{
+    background:white;
+    border:1px solid #e4e7ec;
+    border-radius:12px;
+    padding:22px;
+    margin-bottom:22px;
+    box-shadow:0 2px 8px rgba(16,24,40,.04);
+}
+
+.card-title{
+    font-size:17px;
+    font-weight:bold;
+    margin-bottom:6px;
+}
+
+.card-subtitle{
+    color:#667085;
+    font-size:13px;
+    margin-bottom:20px;
+}
+
+/* GRID */
+.grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.grid-3{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+@media(max-width:900px){
+    .sidebar{
+        position:relative;
+        width:100%;
+        min-height:auto;
+    }
+
+    .main{
+        margin-left:0;
+        width:100%;
+    }
+
+    .app{
+        display:block;
+    }
+
+    .grid-2,
+    .grid-3{
+        grid-template-columns:1fr;
+    }
+}
+
+/* FORM */
+label{
+    display:block;
+    font-size:12px;
+    font-weight:bold;
+    color:#344054;
+    margin-bottom:7px;
+}
+
+input,
+select{
+    width:100%;
+    padding:12px;
+    border:1px solid #d0d5dd;
+    border-radius:7px;
+    outline:none;
+    background:white;
+}
+
+input:focus,
+select:focus{
+    border-color:#35c98b;
+    box-shadow:0 0 0 3px rgba(53,201,139,.12);
+}
+
+.form-group{
+    margin-bottom:16px;
+}
+
+/* BUTTONS */
+.btn{
+    padding:11px 18px;
+    border-radius:7px;
+    font-weight:bold;
+    font-size:13px;
+}
+
+.btn-primary{
+    background:#12b76a;
+    color:white;
+}
+
+.btn-primary:hover{
+    background:#039855;
+}
+
+.btn-secondary{
+    background:#eef2f6;
+    color:#344054;
+}
+
+.btn-danger{
+    background:#fee4e2;
+    color:#b42318;
+}
+
+.btn-warning{
+    background:#fff4cc;
+    color:#7a5a00;
+}
+
+/* HSP BOX */
+.hsp-box{
+    background:#f8fafc;
+    border:1px solid #e4e7ec;
+    border-radius:9px;
+    padding:15px;
+    text-align:center;
+}
+
+.hsp-label{
+    font-size:11px;
+    color:#667085;
+    margin-bottom:6px;
+}
+
+.hsp-value{
+    font-size:22px;
+    font-weight:bold;
+    color:#101828;
+}
+
+.unit{
+    font-size:11px;
+    color:#667085;
+}
+
+/* CALCULATOR */
+.calc-result{
+    display:none;
+    margin-top:20px;
+    padding:22px;
+    border-radius:10px;
+    background:#ecfdf3;
+    border:1px solid #abefc6;
+}
+
+.ra-number{
+    font-size:36px;
+    font-weight:bold;
+    color:#067647;
+}
+
+.compatibility{
+    font-weight:bold;
+    margin-top:5px;
+}
+
+/* TABLE */
+.table-wrap{
+    overflow:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:650px;
+}
+
+th{
+    background:#f2f4f7;
+    padding:12px;
+    text-align:left;
+    font-size:12px;
+}
+
+td{
+    padding:12px;
+    border-bottom:1px solid #eaecf0;
+    font-size:13px;
+}
+
+.rank{
+    font-weight:bold;
+}
+
+.rank-1{
+    color:#067647;
+}
+
+/* ADMIN */
+.admin-login{
+    max-width:450px;
+    margin:50px auto;
+}
+
+.admin-panel{
+    display:none;
+}
+
+.admin-tabs{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.admin-tab{
+    padding:10px 18px;
+    border-radius:7px;
+    background:#eef2f6;
+}
+
+.admin-tab.active{
+    background:#101828;
+    color:white;
+}
+
+.admin-section{
+    display:none;
+}
+
+.admin-section.active{
+    display:block;
+}
+
+.message{
+    margin-top:12px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.success{
+    color:#067647;
+}
+
+.error{
+    color:#b42318;
+}
+
+/* ABOUT */
+.about-box{
+    line-height:1.7;
+    color:#475467;
+}
+
+.info{
+    background:#f2f4f7;
+    border-left:4px solid #12b76a;
+    padding:15px;
+    margin-top:15px;
+    border-radius:5px;
+}
 </style>
 </head>
+
 <body>
 
-<div id="login-box">
-  <div class="lcard">
-    <h1>💊 DrugXpert AI</h1>
-    <p>Computational Drug Formulation Platform</p>
-    <div class="tabs">
-      <button type="button" id="t-part" class="tab active" onclick="setTab('part')">👤 Participant</button>
-      <button type="button" id="t-adm" class="tab" onclick="setTab('adm')">🛡️ Admin</button>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+
+    <div class="logo">
+        Drug<span>Xpert</span> AI
     </div>
-    <form id="f-part" onsubmit="doPartLogin(event)">
-      <div class="fg"><label>Your Full Name</label><input type="text" id="p-name" placeholder="Enter your name" required></div>
-      <div class="fg"><label>Department / Lab (Optional)</label><input type="text" id="p-dept" placeholder="e.g. Pharmaceutics"></div>
-      <button type="submit" class="btn">Enter Software →</button>
-    </form>
-    <form id="f-adm" class="hidden" onsubmit="doAdmLogin(event)">
-      <div class="fg"><label>Admin Username</label><input type="text" id="a-user" placeholder="admin" required></div>
-      <div class="fg"><label>Admin Password</label><input type="password" id="a-pass" placeholder="drugxpert123" required></div>
-      <button type="submit" class="btn">Login as Admin 🔒</button>
-    </form>
-  </div>
+
+    <div class="logo-sub">
+        Intelligent Pharmaceutical Research Platform
+    </div>
+
+    <div class="nav-title">MAIN</div>
+
+    <button class="nav-btn active"
+            id="hspNav"
+            onclick="showPage('hspPage',this)">
+        HSP Compatibility
+    </button>
+
+    <button class="nav-btn"
+            id="adminNav"
+            onclick="showPage('adminPage',this)">
+        Admin Control
+    </button>
+
+    <button class="nav-btn"
+            onclick="showPage('aboutPage',this)">
+        About
+    </button>
+
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<header class="topbar">
+
+    <h1 id="pageTitle">
+        HSP Based Polymer Compatibility
+    </h1>
+
+    <p id="pageSubtitle">
+        Hansen Solubility Parameter based compatibility screening
+    </p>
+
+</header>
+
+<div class="content">
+
+<!-- ================= HSP PAGE ================= -->
+
+<section id="hspPage" class="page active">
+
+    <!-- DRUG + POLYMER -->
+    <div class="grid-2">
+
+        <!-- DRUG -->
+        <div class="card">
+
+            <div class="card-title">
+                Select Drug
+            </div>
+
+            <div class="card-subtitle">
+                Search and select a drug from the database
+            </div>
+
+            <div class="form-group">
+
+                <label>Drug Search</label>
+
+                <input
+                    id="drugSearch"
+                    type="text"
+                    placeholder="Search drug..."
+                    oninput="searchDrug()">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Drug</label>
+
+                <select
+                    id="drugSelect"
+                    onchange="selectDrug()">
+
+                    <option value="">
+                        Select Drug
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="grid-3">
+
+                <div class="hsp-box">
+                    <div class="hsp-label">δD</div>
+                    <div class="hsp-value" id="drugD">-</div>
+                    <div class="unit">MPa½</div>
+                </div>
+
+                <div class="hsp-box">
+                    <div class="hsp-label">δP</div>
+                    <div class="hsp-value" id="drugP">-</div>
+                    <div class="unit">MPa½</div>
+                </div>
+
+                <div class="hsp-box">
+                    <div class="hsp-label">δH</div>
+                    <div class="hsp-value" id="drugH">-</div>
+                    <div class="unit">MPa½</div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- POLYMER -->
+        <div class="card">
+
+            <div class="card-title">
+                Select Polymer
+            </div>
+
+            <div class="card-subtitle">
+                Search and select a polymer from the database
+            </div>
+
+            <div class="form-group">
+
+                <label>Polymer Search</label>
+
+                <input
+                    id="polymerSearch"
+                    type="text"
+                    placeholder="Search polymer..."
+                    oninput="searchPolymer()">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Polymer</label>
+
+                <select
+                    id="polymerSelect"
+                    onchange="selectPolymer()">
+
+                    <option value="">
+                        Select Polymer
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="grid-3">
+
+                <div class="hsp-box">
+                    <div class="hsp-label">δD</div>
+                    <div class="hsp-value" id="polyD">-</div>
+                    <div class="unit">MPa½</div>
+                </div>
+
+                <div class="hsp-box">
+                    <div class="hsp-label">δP</div>
+                    <div class="hsp-value" id="polyP">-</div>
+                    <div class="unit">MPa½</div>
+                </div>
+
+                <div class="hsp-box">
+                    <div class="hsp-label">δH</div>
+                    <div class="hsp-value" id="polyH">-</div>
+                    <div class="unit">MPa½</div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CALCULATOR -->
+
+    <div class="card">
+
+        <div class="card-title">
+            HSP Ra Calculator
+        </div>
+
+        <div class="card-subtitle">
+            Hansen distance between selected drug and polymer
+        </div>
+
+        <div class="grid-2">
+
+            <div class="form-group">
+
+                <label>Selected Drug</label>
+
+                <input
+                    id="calcDrug"
+                    type="text"
+                    readonly
+                    placeholder="Select drug above">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Selected Polymer</label>
+
+                <input
+                    id="calcPolymer"
+                    type="text"
+                    readonly
+                    placeholder="Select polymer above">
+
+            </div>
+
+        </div>
+
+        <button
+            class="btn btn-primary"
+            onclick="calculateRa()">
+
+            Calculate HSP Ra
+
+        </button>
+
+        <div
+            id="raResult"
+            class="calc-result">
+
+            <div>
+                <div class="hsp-label">
+                    Hansen Distance (Ra)
+                </div>
+
+                <div
+                    id="raValue"
+                    class="ra-number">
+
+                    -
+
+                </div>
+
+                <div
+                    id="compatibility"
+                    class="compatibility">
+
+                    -
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RANKING -->
+
+    <div class="card">
+
+        <div class="card-title">
+            Polymer Compatibility Ranking
+        </div>
+
+        <div class="card-subtitle">
+            Lower Ra indicates better HSP-based compatibility
+        </div>
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Rank</th>
+                        <th>Polymer</th>
+                        <th>δD</th>
+                        <th>δP</th>
+                        <th>δH</th>
+                        <th>Ra</th>
+                        <th>Compatibility</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="rankingBody">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ADMIN PAGE ================= -->
+
+<section id="adminPage" class="page">
+
+    <!-- LOGIN -->
+    <div
+        id="adminLogin"
+        class="admin-login card">
+
+        <div class="card-title">
+            Admin Control
+        </div>
+
+        <div class="card-subtitle">
+            Authorized access to DrugXpert AI database
+        </div>
+
+        <div class="form-group">
+
+            <label>Username</label>
+
+            <input
+                id="adminUsername"
+                type="text"
+                placeholder="Enter username">
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Password</label>
+
+            <input
+                id="adminPassword"
+                type="password"
+                placeholder="Enter password">
+
+        </div>
+
+        <button
+            class="btn btn-primary"
+            onclick="adminLogin()">
+
+            Login
+
+        </button>
+
+        <div
+            id="loginMessage"
+            class="message">
+
+        </div>
+
+    </div>
+
+
+    <!-- ADMIN PANEL -->
+
+    <div
+        id="adminPanel"
+        class="admin-panel">
+
+        <div class="card">
+
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+
+                <div>
+
+                    <div class="card-title">
+                        Database Management
+                    </div>
+
+                    <div class="card-subtitle">
+                        Add, update and delete HSP records
+                    </div>
+
+                </div>
+
+                <button
+                    class="btn btn-danger"
+                    onclick="adminLogout()">
+
+                    Logout
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ADMIN TABS -->
+
+        <div class="admin-tabs">
+
+            <button
+                id="drugTab"
+                class="admin-tab active"
+                onclick="showAdminSection('drugAdmin',this)">
+
+                Drug Database
+
+            </button>
+
+            <button
+                id="polymerTab"
+                class="admin-tab"
+                onclick="showAdminSection('polymerAdmin',this)">
+
+                Polymer Database
+
+            </button>
+
+        </div>
+
+
+        <!-- DRUG ADMIN -->
+
+        <div
+            id="drugAdmin"
+            class="admin-section active">
+
+            <div class="card">
+
+                <div class="card-title">
+                    Add / Update Drug
+                </div>
+
+                <br>
+
+                <div class="grid-2">
+
+                    <div class="form-group">
+
+                        <label>Drug Name</label>
+
+                        <input
+                            id="newDrugName"
+                            type="text"
+                            placeholder="Drug name">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>δD</label>
+
+                        <input
+                            id="newDrugD"
+                            type="number"
+                            step="0.01"
+                            placeholder="Dispersion">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>δP</label>
+
+                        <input
+                            id="newDrugP"
+                            type="number"
+                            step="0.01"
+                            placeholder="Polar">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>δH</label>
+
+                        <input
+                            id="newDrugH"
+                            type="number"
+                            step="0.01"
+                            placeholder="Hydrogen bonding">
+
+                    </div>
+
+                </div>
+
+                <button
+                    class="btn btn-primary"
+                    onclick="addDrug()">
+
+                    Add / Update Drug
+
+                </button>
+
+                <button
+                    class="btn btn-secondary"
+                    onclick="clearDrugForm()">
+
+                    Clear
+
+                </button>
+
+                <div
+                    id="drugMessage"
+                    class="message">
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-title">
+                    Drug Database
+                </div>
+
+                <br>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Drug</th>
+                                <th>δD</th>
+                                <th>δP</th>
+                                <th>δH</th>
+                                <th>HSP Total</th>
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="drugAdminTable">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- POLYMER ADMIN -->
+
+        <div
+            id="polymerAdmin"
+            class="admin-section">
+
+            <div class="card">
+
+                <div class="card-title">
+                    Add / Update Polymer
+                </div>
+
+                <br>
+
+                <div class="grid-2">
+
+                    <div class="form-group">
+
+                        <label>Polymer Name</label>
+
+                        <input
+                            id="newPolymerName"
+                            type="text"
+                            placeholder="Polymer name">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>δD</label>
+
+                        <input
+                            id="newPolymerD"
+                            type="number"
+                            step="0.01"
+                            placeholder="Dispersion">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>δP</label>
+
+                        <input
+                            id="newPolymerP"
+                            type="number"
+                            step="0.01"
+                            placeholder="Polar">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>δH</label>
+
+                        <input
+                            id="newPolymerH"
+                            type="number"
+                            step="0.01"
+                            placeholder="Hydrogen bonding">
+
+                    </div>
+
+                </div>
+
+                <button
+                    class="btn btn-primary"
+                    onclick="addPolymer()">
+
+                    Add / Update Polymer
+
+                </button>
+
+                <button
+                    class="btn btn-secondary"
+                    onclick="clearPolymerForm()">
+
+                    Clear
+
+                </button>
+
+                <div
+                    id="polymerMessage"
+                    class="message">
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-title">
+                    Polymer Database
+                </div>
+
+                <br>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Polymer</th>
+                                <th>δD</th>
+                                <th>δP</th>
+                                <th>δH</th>
+                                <th>HSP Total</th>
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="polymerAdminTable">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ABOUT PAGE ================= -->
+
+<section id="aboutPage" class="page">
+
+    <div class="card">
+
+        <div class="card-title">
+            About DrugXpert AI
+        </div>
+
+        <div class="about-box">
+
+            <p>
+                DrugXpert AI is a pharmaceutical computational
+                research platform designed to support
+                HSP-based drug–polymer compatibility screening.
+            </p>
+
+            <div class="info">
+
+                <b>HSP Principle:</b><br>
+
+                The Hansen distance (Ra) is calculated from
+                dispersion (δD), polar (δP), and hydrogen-bonding
+                (δH) parameters.
+
+                <br><br>
+
+                <b>Interpretation:</b><br>
+
+                Lower Ra indicates closer HSP similarity and
+                therefore better predicted compatibility.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
 </div>
 
-<div id="app" class="hidden">
-  <div class="side">
-    <h2 onclick="go('home')">💊 DrugXpert AI</h2>
-    <div class="ubadge"><small id="u-role">Participant</small><br><strong id="u-name">User</strong></div>
-    <button type="button" id="b-home" class="nbtn active" onclick="go('home')">🏠 Home</button>
-    <button type="button" id="b-hsp" class="nbtn" onclick="go('hsp')">🧪 HSP Compatibility</button>
-    <button type="button" id="b-sol" class="nbtn" onclick="go('sol')">🤖 AI/ML Solubility</button>
-    <button type="button" id="b-slv" class="nbtn" onclick="go('slv')">🧴 Solvent Lookup</button>
-    <button type="button" id="b-int" class="nbtn" onclick="go('int')">🔗 Integrated Screening</button>
-    <button type="button" id="b-adm" class="nbtn abtn hidden" onclick="go('adm')">⚙️ Admin Control Panel</button>
-    <button type="button" class="lout" onclick="doLogout()">🚪 Logout</button>
-  </div>
+</main>
 
-  <div class="content">
-    <div id="p-home" class="pg">
-      <div class="hero">
-        <h1 id="h-title">💊 DrugXpert AI</h1>
-        <p id="h-sub">Integrated Computational Platform for Drug–Excipient Compatibility, Solubility Prediction and Solvent Selection</p>
-      </div>
-      <h3>🔬 Core Modules (Click any card to open)</h3>
-      <div class="grid3">
-        <div class="card" onclick="go('hsp')"><h3>🧪 HSP Compatibility</h3><p>Hansen Solubility Parameter based screening using δD, δP, δH and Ra distance.</p><strong style="color:#087f8c">Open Module →</strong></div>
-        <div class="card" onclick="go('sol')"><h3>🤖 AI/ML Solubility</h3><p>Molecular descriptor-based prediction of LogS and solubility.</p><strong style="color:#087f8c">Open Module →</strong></div>
-        <div class="card" onclick="go('slv')"><h3>🧴 Solvent Lookup</h3><p>Lookup and ranking of suitable solvents for polymers and excipients.</p><strong style="color:#087f8c">Open Module →</strong></div>
-      </div>
-      <div class="info" onclick="go('int')"><strong>🔗 Click here for Integrated Screening:</strong> Drug → Excipient → HSP → Descriptors → Solubility → Solvent → Recommendation →</div>
-    </div>
+</div>
 
-    <div id="p-hsp" class="pg hidden">
-      <button type="button" class="back" onclick="go('home')">← Back to Home</button>
-      <h2>🧪 HSP Compatibility Screening</h2><br>
-      <div class="fg" style="max-width:350px"><label>Select Drug</label><select id="hsp-d" onchange="calcHSP()"></select></div>
-      <div id="hsp-out" class="hidden">
-        <div class="grid3">
-          <div class="mbox"><span>δD</span><strong id="v-dd">-</strong></div>
-          <div class="mbox"><span>δP</span><strong id="v-dp">-</strong></div>
-          <div class="mbox"><span>δH</span><strong id="v-dh">-</strong></div>
-        </div>
-        <table><thead><tr><th>Excipient</th><th>δD / δP / δH</th><th>Ra Distance</th><th>Result</th></tr></thead><tbody id="hsp-tb"></tbody></table>
-      </div>
-    </div>
 
-    <div id="p-sol" class="pg hidden">
-      <button type="button" class="back" onclick="go('home')">← Back to Home</button>
-      <h2>🤖 AI/ML Solubility Prediction</h2><br>
-      <div class="grid2">
-        <div class="fg"><label>Select Drug</label><select id="sol-d" onchange="showDesc()"></select></div>
-        <div class="fg"><label>Select Excipient</label><select id="sol-e"></select></div>
-      </div>
-      <div class="grid4">
-        <div class="mbox"><span>LogP</span><strong id="d-lp">-</strong></div>
-        <div class="mbox"><span>Mol. Weight</span><strong id="d-mw">-</strong></div>
-        <div class="mbox"><span>Rotatable Bonds</span><strong id="d-rt">-</strong></div>
-        <div class="mbox"><span>Aromatic Prop.</span><strong id="d-ar">-</strong></div>
-      </div>
-      <button type="button" class="btn btn-sm" onclick="calcSol()">Predict Solubility</button>
-      <div id="sol-out" class="ok hidden"></div>
-    </div>
+<script>
 
-    <div id="p-slv" class="pg hidden">
-      <button type="button" class="back" onclick="go('home')">← Back to Home</button>
-      <h2>🧴 Solvent Lookup</h2><br>
-      <div class="fg" style="max-width:350px"><label>Select Polymer / Excipient</label><select id="slv-p" onchange="calcSlv()"></select></div>
-      <div id="slv-out" class="hidden"><table><thead><tr><th>Rank</th><th>Solvent</th><th>Status</th></tr></thead><tbody id="slv-tb"></tbody></table></div>
-    </div>
+/* ==========================================================
+   DRUGXPERT AI - DATABASE
+========================================================== */
 
-    <div id="p-int" class="pg hidden">
-      <button type="button" class="back" onclick="go('home')">← Back to Home</button>
-      <h2>🔗 Integrated Screening</h2><br>
-      
+const DRUG_KEY = "drugxpert_ai_drugs";
+const POLYMER_KEY = "drugxpert_ai_polymers";
+
+
+/* DEFAULT DATA */
+
+const defaultDrugs = [
+    {
+        id:"deflazacort",
+        name:"Deflazacort",
+        d:18.20,
+        p:7.10,
+        h:9.60
+    },
+    {
+        id:"artemether",
+        name:"Artemether",
+        d:18.10,
+        p:5.20,
+        h:8.10
+    },
+    {
+        id:"curcumin",
+        name:"Curcumin",
+        d:19.30,
+        p:8.40,
+        h:10.20
+    },
+    {
+        id:"resveratrol",
+        name:"Resveratrol",
+        d:20.10,
+        p:10.20,
+        h:12.80
+    }
+];
+
+
+const defaultPolymers = [
+    {
+        id:"pvp-k30",
+        name:"PVP K30",
+        d:17.80,
+        p:12.20,
+        h:10.80
+    },
+    {
+        id:"soluplus",
+        name:"Soluplus",
+        d:18.40,
+        p:10.80,
+        h:12.50
+    },
+    {
+        id:"peg-6000",
+        name:"PEG 6000",
+        d:17.10,
+        p:9.20,
+        h:12.00
+    },
+    {
+        id:"poloxamer-188",
+        name:"Poloxamer 188",
+        d:16.90,
+        p:7.80,
+        h:10.90
+    },
+    {
+        id:"poloxamer-407",
+        name:"Poloxamer 407",
+        d:17.20,
+        p:7.60,
+        h:10.70
+    },
+    {
+        id:"hpmc-e15",
+        name:"HPMC E15LV",
+        d:17.00,
+        p:8.50,
+        h:11.80
+    }
+];
+
+
+/* ==========================================================
+   DATABASE FUNCTIONS
+========================================================== */
+
+function getDrugs(){
+
+    let data = localStorage.getItem(DRUG_KEY);
+
+    if(!data){
+
+        localStorage.setItem(
+            DRUG_KEY,
+            JSON.stringify(defaultDrugs)
+        );
+
+        return [...defaultDrugs];
+    }
+
+    try{
+        return JSON.parse(data);
+    }
+    catch(error){
+
+        localStorage.setItem(
+            DRUG_KEY,
+            JSON.stringify(defaultDrugs)
+        );
+
+        return [...defaultDrugs];
+    }
+}
+
+
+function getPolymers(){
+
+    let data = localStorage.getItem(POLYMER_KEY);
+
+    if(!data){
+
+        localStorage.setItem(
+            POLYMER_KEY,
+            JSON.stringify(defaultPolymers)
+        );
+
+        return [...defaultPolymers];
+    }
+
+    try{
+        return JSON.parse(data);
+    }
+    catch(error){
+
+        localStorage.setItem(
+            POLYMER_KEY,
+            JSON.stringify(defaultPolymers)
+        );
+
+        return [...defaultPolymers];
+    }
+}
+
+
+function saveDrugs(data){
+
+    localStorage.setItem(
+        DRUG_KEY,
+        JSON.stringify(data)
+    );
+}
+
+
+function savePolymers(data){
+
+    localStorage.setItem(
+        POLYMER_KEY,
+        JSON.stringify(data)
+    );
+}
+
+
+/* ==========================================================
+   HSP TOTAL
+========================================================== */
+
+function calculateHSPTotal(d,p,h){
+
+    return Math.sqrt(
+        (d*d) +
+        (p*p) +
+        (h*h)
+    );
+}
+
+
+/* ==========================================================
+   PAGE NAVIGATION
+========================================================== */
+
+function showPage(pageId,button){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(page => {
+            page.classList.remove("active");
+        });
+
+    const page =
+        document.getElementById(pageId);
+
+    if(page){
+        page.classList.add("active");
+    }
+
+
+    document
+        .querySelectorAll(".nav-btn")
+        .forEach(btn => {
+            btn.classList.remove("active");
+        });
+
+
+    if(button){
+        button.classList.add("active");
+    }
+
+
+    if(pageId === "hspPage"){
+
+        document.getElementById("pageTitle").textContent =
+            "HSP Based Polymer Compatibility";
+
+        document.getElementById("pageSubtitle").textContent =
+            "Hansen Solubility Parameter based compatibility screening";
+
+    }
+
+
+    else if(pageId === "adminPage"){
+
+        document.getElementById("pageTitle").textContent =
+            "Admin Control";
+
+        document.getElementById("pageSubtitle").textContent =
+            "Manage drug and polymer HSP database";
+
+    }
+
+
+    else if(pageId === "aboutPage"){
+
+        document.getElementById("pageTitle").textContent =
+            "About DrugXpert AI";
+
+        document.getElementById("pageSubtitle").textContent =
+            "Pharmaceutical computational research platform";
+
+    }
+
+}
+
+
+/* ==========================================================
+   DRUG SEARCH
+========================================================== */
+
+function loadDrugDropdown(list = getDrugs()){
+
+    const select =
+        document.getElementById("drugSelect");
+
+    if(!select) return;
+
+    select.innerHTML =
+        `<option value="">Select Drug</option>`;
+
+    list.forEach(drug => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = drug.id;
+
+        option.textContent = drug.name;
+
+        select.appendChild(option);
+
+    });
+
+}
+
+
+function searchDrug(){
+
+    const search =
+        document
+        .getElementById("drugSearch")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    const drugs =
+        getDrugs();
+
+
+    const filtered =
+        drugs.filter(drug =>
+            drug.name
+            .toLowerCase()
+            .includes(search)
+        );
+
+
+    loadDrugDropdown(filtered);
+
+}
+
+
+/* ==========================================================
+   DRUG SELECT
+========================================================== */
+
+function selectDrug(){
+
+    const id =
+        document
+        .getElementById("drugSelect")
+        .value;
+
+
+    const drug =
+        getDrugs()
+        .find(item => item.id === id);
+
+
+    if(!drug){
+
+        document.getElementById("drugD").textContent = "-";
+        document.getElementById("drugP").textContent = "-";
+        document.getElementById("drugH").textContent = "-";
+
+        document.getElementById("calcDrug").value = "";
+
+        return;
+    }
+
+
+    document.getElementById("drugD").textContent =
+        Number(drug.d).toFixed(2);
+
+    document.getElementById("drugP").textContent =
+        Number(drug.p).toFixed(2);
+
+    document.getElementById("drugH").textContent =
+        Number(drug.h).toFixed(2);
+
+
+    document.getElementById("calcDrug").value =
+        drug.name;
+
+
+    generateRanking();
+
+}
+
+
+/* ==========================================================
+   POLYMER SEARCH
+========================================================== */
+
+function loadPolymerDropdown(list = getPolymers()){
+
+    const select =
+        document.getElementById("polymerSelect");
+
+    if(!select) return;
+
+    select.innerHTML =
+        `<option value="">Select Polymer</option>`;
+
+
+    list.forEach(polymer => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = polymer.id;
+
+        option.textContent =
+            polymer.name;
+
+        select.appendChild(option);
+
+    });
+
+}
+
+
+function searchPolymer(){
+
+    const search =
+        document
+        .getElementById("polymerSearch")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    const polymers =
+        getPolymers();
+
+
+    const filtered =
+        polymers.filter(polymer =>
+            polymer.name
+            .toLowerCase()
+            .includes(search)
+        );
+
+
+    loadPolymerDropdown(filtered);
+
+}
+
+
+/* ==========================================================
+   POLYMER SELECT
+========================================================== */
+
+function selectPolymer(){
+
+    const id =
+        document
+        .getElementById("polymerSelect")
+        .value;
+
+
+    const polymer =
+        getPolymers()
+        .find(item => item.id === id);
+
+
+    if(!polymer){
+
+        document.getElementById("polyD").textContent = "-";
+        document.getElementById("polyP").textContent = "-";
+        document.getElementById("polyH").textContent = "-";
+
+        document.getElementById("calcPolymer").value = "";
+
+        return;
+    }
+
+
+    document.getElementById("polyD").textContent =
+        Number(polymer.d).toFixed(2);
+
+    document.getElementById("polyP").textContent =
+        Number(polymer.p).toFixed(2);
+
+    document.getElementById("polyH").textContent =
+        Number(polymer.h).toFixed(2);
+
+
+    document.getElementById("calcPolymer").value =
+        polymer.name;
+
+}
+
+
+/* ==========================================================
+   HSP RA CALCULATION
+========================================================== */
+
+function calculateRa(){
+
+    const drugId =
+        document.getElementById("drugSelect").value;
+
+
+    const polymerId =
+        document.getElementById("polymerSelect").value;
+
+
+    if(!drugId || !polymerId){
+
+        alert("Please select both drug and polymer.");
+
+        return;
+    }
+
+
+    const drug =
+        getDrugs()
+        .find(item => item.id === drugId);
+
+
+    const polymer =
+        getPolymers()
+        .find(item => item.id === polymerId);
+
+
+    if(!drug || !polymer){
+
+        alert("Drug or polymer data not found.");
+
+        return;
+    }
+
+
+    /*
+      Hansen distance:
+
+      Ra = sqrt[
+        4(δD1-δD2)^2
+        +(δP1-δP2)^2
+        +(δH1-δH2)^2
+      ]
+    */
+
+
+    const ra =
+        Math.sqrt(
+            4 * Math.pow(
+                Number(drug.d) - Number(polymer.d),
+                2
+            )
+            +
+            Math.pow(
+                Number(drug.p) - Number(polymer.p),
+                2
+            )
+            +
+            Math.pow(
+                Number(drug.h) - Number(polymer.h),
+                2
+            )
+        );
+
+
+    document.getElementById("raValue").textContent =
+        ra.toFixed(3);
+
+
+    document.getElementById("compatibility").textContent =
+        getCompatibility(ra);
+
+
+    document.getElementById("raResult").style.display =
+        "block";
+
+
+    generateRanking();
+
+}
+
+
+/* ==========================================================
+   COMPATIBILITY
+========================================================== */
+
+function getCompatibility(ra){
+
+    if(ra <= 3){
+        return "Excellent compatibility";
+    }
+
+    if(ra <= 5){
+        return "Good compatibility";
+    }
+
+    if(ra <= 8){
+        return "Moderate compatibility";
+    }
+
+    if(ra <= 12){
+        return "Low compatibility";
+    }
+
+    return "Poor compatibility";
+}
+
+
+/* ==========================================================
+   RANKING
+========================================================== */
+
+function generateRanking(){
+
+    const drugId =
+        document.getElementById("drugSelect").value;
+
+
+    const tbody =
+        document.getElementById("rankingBody");
+
+
+    tbody.innerHTML = "";
+
+
+    if(!drugId){
+
+        tbody.innerHTML = `
+        <tr>
+            <td colspan="7">
+                Select a drug to generate polymer ranking.
+            </td>
+        </tr>`;
+
+        return;
+    }
+
+
+    const drug =
+        getDrugs()
+        .find(item => item.id === drugId);
+
+
+    if(!drug) return;
+
+
+    const ranking =
+        getPolymers()
+        .map(polymer => {
+
+            const ra =
+                Math.sqrt(
+                    4 * Math.pow(
+                        Number(drug.d) -
+                        Number(polymer.d),
+                        2
+                    )
+                    +
+                    Math.pow(
+                        Number(drug.p) -
+                        Number(polymer.p),
+                        2
+                    )
+                    +
+                    Math.pow(
+                        Number(drug.h) -
+                        Number(polymer.h),
+                        2
+                    )
+                );
+
+
+            return {
+                polymer,
+                ra
+            };
+
+        })
+        .sort((a,b) => a.ra - b.ra);
+
+
+    ranking.forEach((item,index) => {
+
+        const row =
+            document.createElement("tr");
+
+
+        row.innerHTML = `
+
+            <td class="rank ${index === 0 ? "rank-1" : ""}">
+                ${index + 1}
+            </td>
+
+            <td>
+                <b>${escapeHTML(item.polymer.name)}</b>
+            </td>
+
+            <td>
+                ${Number(item.polymer.d).toFixed(2)}
+            </td>
+
+            <td>
+                ${Number(item.polymer.p).toFixed(2)}
+            </td>
+
+            <td>
+                ${Number(item.polymer.h).toFixed(2)}
+            </td>
+
+            <td>
+                <b>${item.ra.toFixed(3)}</b>
+            </td>
+
+            <td>
+                ${getCompatibility(item.ra)}
+            </td>
+
+        `;
+
+
+        tbody.appendChild(row);
+
+    });
+
+}
+
+
+/* ==========================================================
+   ADMIN LOGIN
+========================================================== */
+
+function adminLogin(){
+
+    const username =
+        document
+        .getElementById("adminUsername")
+        .value
+        .trim();
+
+
+    const password =
+        document
+        .getElementById("adminPassword")
+        .value;
+
+
+    /*
+      DEVELOPMENT LOGIN
+
+      Username:
+      admin
+
+      Password:
+      DrugXpert@123
+    */
+
+
+    if(
+        username === "admin" &&
+        password === "DrugXpert@123"
+    ){
+
+        sessionStorage.setItem(
+            "drugxpert_admin",
+            "true"
+        );
+
+
+        document.getElementById("adminLogin").style.display =
+            "none";
+
+
+        document.getElementById("adminPanel").style.display =
+            "block";
+
+
+        document.getElementById("loginMessage").textContent =
+            "";
+
+
+        refreshAdminTables();
+
+    }
+
+    else{
+
+        document.getElementById("loginMessage").textContent =
+            "Invalid username or password.";
+
+        document.getElementById("loginMessage").className =
+            "message error";
+
+    }
+
+}
+
+
+/* ==========================================================
+   ADMIN LOGOUT
+========================================================== */
+
+function adminLogout(){
+
+    sessionStorage.removeItem(
+        "drugxpert_admin"
+    );
+
+
+    document.getElementById("adminPanel").style.display =
+        "none";
+
+
+    document.getElementById("adminLogin").style.display =
+        "block";
+
+
+    document.getElementById("adminUsername").value = "";
+    document.getElementById("adminPassword").value = "";
+
+}
+
+
+/* ==========================================================
+   ADMIN SECTIONS
+========================================================== */
+
+function showAdminSection(sectionId,button){
+
+    document
+        .querySelectorAll(".admin-section")
+        .forEach(section => {
+
+            section.classList.remove("active");
+
+        });
+
+
+    document
+        .getElementById(sectionId)
+        .classList.add("active");
+
+
+    document
+        .querySelectorAll(".admin-tab")
+        .forEach(tab => {
+
+            tab.classList.remove("active");
+
+        });
+
+
+    if(button){
+
+        button.classList.add("active");
+
+    }
+
+}
+
+
+/* ==========================================================
+   ADD / UPDATE DRUG
+========================================================== */
+
+function addDrug(){
+
+    const name =
+        document
+        .getElementById("newDrugName")
+        .value
+        .trim();
+
+
+    const d =
+        parseFloat(
+            document.getElementById("newDrugD").value
+        );
+
+
+    const p =
+        parseFloat(
+            document.getElementById("newDrugP").value
+        );
+
+
+    const h =
+        parseFloat(
+            document.getElementById("newDrugH").value
+        );
+
+
+    const message =
+        document.getElementById("drugMessage");
+
+
+    if(
+        !name ||
+        isNaN(d) ||
+        isNaN(p) ||
+        isNaN(h)
+    ){
+
+        message.textContent =
+            "Please enter drug name and all HSP values.";
+
+        message.className =
+            "message error";
+
+        return;
+    }
+
+
+    let drugs =
+        getDrugs();
+
+
+    const id =
+        createId(name);
+
+
+    const existingIndex =
+        drugs.findIndex(
+            drug =>
+                drug.name.toLowerCase() ===
+                name.toLowerCase()
+        );
+
+
+    const newDrug = {
+
+        id:
+            existingIndex >= 0
+            ? drugs[existingIndex].id
+            : id,
+
+        name,
+        d,
+        p,
+        h
+
+    };
+
+
+    if(existingIndex >= 0){
+
+        drugs[existingIndex] =
+            newDrug;
+
+        message.textContent =
+            "Drug updated successfully.";
+
+    }
+
+    else{
+
+        drugs.push(newDrug);
+
+        message.textContent =
+            "Drug added successfully.";
+
+    }
+
+
+    saveDrugs(drugs);
+
+
+    message.className =
+        "message success";
+
+
+    clearDrugForm();
+
+
+    refreshAdminTables();
+
+
+    loadDrugDropdown();
+
+
+    generateRanking();
+
+}
+
+
+/* ==========================================================
+   ADD / UPDATE POLYMER
+========================================================== */
+
+function addPolymer(){
+
+    const name =
+        document
+        .getElementById("newPolymerName")
+        .value
+        .trim();
+
+
+    const d =
+        parseFloat(
+            document.getElementById("newPolymerD").value
+        );
+
+
+    const p =
+        parseFloat(
+            document.getElementById("newPolymerP").value
+        );
+
+
+    const h =
+        parseFloat(
+            document.getElementById("newPolymerH").value
+        );
+
+
+    const message =
+        document.getElementById("polymerMessage");
+
+
+    if(
+        !name ||
+        isNaN(d) ||
+        isNaN(p) ||
+        isNaN(h)
+    ){
+
+        message.textContent =
+            "Please enter polymer name and all HSP values.";
+
+        message.className =
+            "message error";
+
+        return;
+    }
+
+
+    let polymers =
+        getPolymers();
+
+
+    const id =
+        createId(name);
+
+
+    const existingIndex =
+        polymers.findIndex(
+            polymer =>
+                polymer.name.toLowerCase() ===
+                name.toLowerCase()
+        );
+
+
+    const newPolymer = {
+
+        id:
+            existingIndex >= 0
+            ? polymers[existingIndex].id
+            : id,
+
+        name,
+        d,
+        p,
+        h
+
+    };
+
+
+    if(existingIndex >= 0){
+
+        polymers[existingIndex] =
+            newPolymer;
+
+        message.textContent =
+            "Polymer updated successfully.";
+
+    }
+
+    else{
+
+        polymers.push(newPolymer);
+
+        message.textContent =
+            "Polymer added successfully.";
+
+    }
+
+
+    savePolymers(polymers);
+
+
+    message.className =
+        "message success";
+
+
+    clearPolymerForm();
+
+
+    refreshAdminTables();
+
+
+    loadPolymerDropdown();
+
+
+    generateRanking();
+
+}
+
+
+/* ==========================================================
+   CLEAR FORMS
+========================================================== */
+
+function clearDrugForm(){
+
+    document.getElementById("newDrugName").value = "";
+    document.getElementById("newDrugD").value = "";
+    document.getElementById("newDrugP").value = "";
+    document.getElementById("newDrugH").value = "";
+
+}
+
+
+function clearPolymerForm(){
+
+    document.getElementById("newPolymerName").value = "";
+    document.getElementById("newPolymerD").value = "";
+    document.getElementById("newPolymerP").value = "";
+    document.getElementById("newPolymerH").value = "";
+
+}
+
+
+/* ==========================================================
+   ADMIN TABLES
+========================================================== */
+
+function refreshAdminTables(){
+
+    const drugTable =
+        document.getElementById("drugAdminTable");
+
+
+    const polymerTable =
+        document.getElementById("polymerAdminTable");
+
+
+    drugTable.innerHTML = "";
+    polymerTable.innerHTML = "";
+
+
+    getDrugs().forEach(drug => {
+
+        const total =
+            calculateHSPTotal(
+                Number(drug.d),
+                Number(drug.p),
+                Number(drug.h)
+            );
+
+
+        const row =
+            document.createElement("tr");
+
+
+        row.innerHTML = `
+
+            <td>
+                <b>${escapeHTML(drug.name)}</b>
+            </td>
+
+            <td>
+                ${Number(drug.d).toFixed(2)}
+            </td>
+
+            <td>
+                ${Number(drug.p).toFixed(2)}
+            </td>
+
+            <td>
+                ${Number(drug.h).toFixed(2)}
+            </td>
+
+            <td>
+                ${total.toFixed(2)}
+            </td>
+
+            <td>
+
+                <button
+                    class="btn btn-danger"
+                    onclick="deleteDrug('${drug.id}')">
+
+                    Delete
+
+                </button>
+
+            </td>
+
+        `;
+
+
+        drugTable.appendChild(row);
+
+    });
+
+
+    getPolymers().forEach(polymer => {
+
+        const total =
+            calculateHSPTotal(
+                Number(polymer.d),
+                Number(polymer.p),
+                Number(polymer.h)
+            );
+
+
+        const row =
+            document.createElement("tr");
+
+
+        row.innerHTML = `
+
+            <td>
+                <b>${escapeHTML(polymer.name)}</b>
+            </td>
+
+            <td>
+                ${Number(polymer.d).toFixed(2)}
+            </td>
+
+            <td>
+                ${Number(polymer.p).toFixed(2)}
+            </td>
+
+            <td>
+                ${Number(polymer.h).toFixed(2)}
+            </td>
+
+            <td>
+                ${total.toFixed(2)}
+            </td>
+
+            <td>
+
+                <button
+                    class="btn btn-danger"
+                    onclick="deletePolymer('${polymer.id}')">
+
+                    Delete
+
+                </button>
+
+            </td>
+
+        `;
+
+
+        polymerTable.appendChild(row);
+
+    });
+
+}
+
+
+/* ==========================================================
+   DELETE DRUG
+========================================================== */
+
+function deleteDrug(id){
+
+    if(!confirm("Delete this drug?")){
+
+        return;
+
+    }
+
+
+    let drugs =
+        getDrugs();
+
+
+    drugs =
+        drugs.filter(
+            drug => drug.id !== id
+        );
+
+
+    saveDrugs(drugs);
+
+
+    refreshAdminTables();
+
+
+    loadDrugDropdown();
+
+
+    document.getElementById("drugD").textContent = "-";
+    document.getElementById("drugP").textContent = "-";
+    document.getElementById("drugH").textContent = "-";
+
+    document.getElementById("calcDrug").value = "";
+
+    generateRanking();
+
+}
+
+
+/* ==========================================================
+   DELETE POLYMER
+========================================================== */
+
+function deletePolymer(id){
+
+    if(!confirm("Delete this polymer?")){
+
+        return;
+
+    }
+
+
+    let polymers =
+        getPolymers();
+
+
+    polymers =
+        polymers.filter(
+            polymer => polymer.id !== id
+        );
+
+
+    savePolymers(polymers);
+
+
+    refreshAdminTables();
+
+
+    loadPolymerDropdown();
+
+
+    document.getElementById("polyD").textContent = "-";
+    document.getElementById("polyP").textContent = "-";
+    document.getElementById("polyH").textContent = "-";
+
+    document.getElementById("calcPolymer").value = "";
+
+}
+
+
+/* ==========================================================
+   CREATE ID
+========================================================== */
+
+function createId(name){
+
+    return name
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g,"-")
+        .replace(/^-+|-+$/g,"")
+        +
+        "-"
+        +
+        Date.now();
+
+}
+
+
+/* ==========================================================
+   ESCAPE HTML
+========================================================== */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* ==========================================================
+   INITIALIZATION
+========================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        loadDrugDropdown();
+
+        loadPolymerDropdown();
+
+        generateRanking();
+
+
+        if(
+            sessionStorage.getItem("drugxpert_admin")
+            === "true"
+        ){
+
+            document.getElementById("adminLogin").style.display =
+                "none";
+
+            document.getElementById("adminPanel").style.display =
+                "block";
+
+            refreshAdminTables();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
