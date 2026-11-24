@@ -1,0 +1,2476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DrugXpert AI - Compatible Solvents for Polymer</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+    color:#172033;
+    min-height:100vh;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+
+.topbar{
+    height:72px;
+    background:linear-gradient(135deg,#071d35,#0b4f71,#087f8c);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 28px;
+    box-shadow:0 5px 18px rgba(0,0,0,.15);
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+.brand-logo{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    background:rgba(255,255,255,.16);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:21px;
+    font-weight:800;
+}
+
+.brand-text h1{
+    font-size:20px;
+    letter-spacing:.2px;
+}
+
+.brand-text p{
+    font-size:11px;
+    opacity:.78;
+    margin-top:2px;
+}
+
+.back-btn{
+    border:none;
+    background:rgba(255,255,255,.12);
+    color:white;
+    padding:10px 17px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:600;
+    transition:.2s;
+}
+
+.back-btn:hover{
+    background:rgba(255,255,255,.22);
+}
+
+/* =========================
+   LAYOUT
+========================= */
+
+.layout{
+    display:flex;
+    min-height:calc(100vh - 72px);
+}
+
+.sidebar{
+    width:250px;
+    background:#fff;
+    border-right:1px solid #e4e9f0;
+    padding:25px 17px;
+    position:sticky;
+    top:72px;
+    height:calc(100vh - 72px);
+}
+
+.nav-title{
+    font-size:11px;
+    color:#8792a5;
+    font-weight:800;
+    letter-spacing:1.1px;
+    margin:0 12px 12px;
+}
+
+.nav-btn{
+    width:100%;
+    border:none;
+    background:transparent;
+    text-align:left;
+    padding:13px 14px;
+    border-radius:10px;
+    margin-bottom:7px;
+    cursor:pointer;
+    color:#4a5568;
+    font-weight:600;
+    transition:.2s;
+}
+
+.nav-btn:hover{
+    background:#eef7fa;
+    color:#087f8c;
+}
+
+.nav-btn.active{
+    background:linear-gradient(90deg,#e5f7f7,#eef9fb);
+    color:#087f8c;
+    box-shadow:inset 3px 0 #087f8c;
+}
+
+.main{
+    flex:1;
+    padding:32px;
+    max-width:1500px;
+    margin:auto;
+    width:100%;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.page-header{
+    margin-bottom:25px;
+}
+
+.page-header h2{
+    font-size:28px;
+    color:#102a43;
+}
+
+.page-header p{
+    margin-top:7px;
+    color:#6d7788;
+    font-size:14px;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card{
+    background:white;
+    border:1px solid #e4eaf1;
+    border-radius:16px;
+    padding:24px;
+    box-shadow:0 8px 28px rgba(25,50,80,.06);
+    margin-bottom:22px;
+}
+
+.card-title{
+    font-size:17px;
+    font-weight:800;
+    color:#17324d;
+    margin-bottom:6px;
+}
+
+.card-subtitle{
+    font-size:13px;
+    color:#7b8798;
+    margin-bottom:20px;
+}
+
+/* =========================
+   SELECTOR
+========================= */
+
+.selector-row{
+    display:grid;
+    grid-template-columns:minmax(250px,500px) 1fr;
+    gap:20px;
+    align-items:end;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.field label{
+    font-size:12px;
+    font-weight:800;
+    color:#455468;
+}
+
+select,
+input{
+    width:100%;
+    border:1px solid #d7dee8;
+    background:#fff;
+    border-radius:9px;
+    padding:12px 13px;
+    outline:none;
+    font-size:14px;
+    color:#172033;
+    transition:.2s;
+}
+
+select:focus,
+input:focus{
+    border-color:#08a3a9;
+    box-shadow:0 0 0 3px rgba(8,163,169,.1);
+}
+
+/* =========================
+   POLYMER INFO
+========================= */
+
+.hsp-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-top:20px;
+}
+
+.value-card{
+    background:linear-gradient(145deg,#f8fbfd,#f1f8fa);
+    border:1px solid #dfecef;
+    border-radius:13px;
+    padding:17px;
+}
+
+.value-label{
+    color:#738196;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.6px;
+    margin-bottom:8px;
+}
+
+.value{
+    color:#102a43;
+    font-size:22px;
+    font-weight:800;
+}
+
+.unit{
+    color:#8190a3;
+    font-size:11px;
+    margin-left:3px;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.primary-btn{
+    border:none;
+    background:linear-gradient(135deg,#087f8c,#09a6a9);
+    color:white;
+    padding:13px 23px;
+    border-radius:10px;
+    font-weight:800;
+    cursor:pointer;
+    box-shadow:0 7px 18px rgba(8,127,140,.22);
+    transition:.2s;
+}
+
+.primary-btn:hover{
+    transform:translateY(-1px);
+    box-shadow:0 9px 23px rgba(8,127,140,.3);
+}
+
+/* =========================
+   RESULT HEADER
+========================= */
+
+.result-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-bottom:18px;
+}
+
+.selected-polymer{
+    background:#edf9f9;
+    border:1px solid #cceced;
+    color:#087f8c;
+    padding:8px 13px;
+    border-radius:9px;
+    font-size:13px;
+    font-weight:800;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrap{
+    width:100%;
+    overflow-x:auto;
+    border:1px solid #e3e9f0;
+    border-radius:12px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:850px;
+}
+
+thead{
+    background:#f4f7fa;
+}
+
+th{
+    text-align:left;
+    padding:14px 15px;
+    font-size:11px;
+    color:#657286;
+    font-weight:900;
+    letter-spacing:.5px;
+    border-bottom:1px solid #e1e7ee;
+}
+
+td{
+    padding:15px;
+    border-bottom:1px solid #edf0f4;
+    font-size:13px;
+    color:#344054;
+}
+
+tbody tr:hover{
+    background:#f8fcfd;
+}
+
+tbody tr:last-child td{
+    border-bottom:none;
+}
+
+.rank{
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    background:#eef5f7;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:900;
+    color:#087f8c;
+}
+
+.rank.first{
+    background:#dff7ee;
+    color:#087a54;
+}
+
+.ra{
+    font-weight:900;
+    color:#087f8c;
+}
+
+.compatibility{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.3px;
+}
+
+.excellent{
+    background:#dcf7ea;
+    color:#087a54;
+}
+
+.good{
+    background:#e5f3ff;
+    color:#1769aa;
+}
+
+.moderate{
+    background:#fff4d9;
+    color:#996600;
+}
+
+.low{
+    background:#ffe8e8;
+    color:#b42318;
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.empty{
+    text-align:center;
+    padding:45px 20px;
+    color:#7d8998;
+}
+
+.empty-icon{
+    font-size:40px;
+    margin-bottom:10px;
+}
+
+.empty h3{
+    color:#3d4b5c;
+    margin-bottom:6px;
+}
+
+.empty p{
+    font-size:13px;
+}
+
+/* =========================
+   ADMIN MODAL
+========================= */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(7,25,43,.58);
+    z-index:3000;
+    padding:30px;
+    overflow:auto;
+}
+
+.modal.show{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.modal-box{
+    width:min(1100px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:white;
+    border-radius:17px;
+    box-shadow:0 25px 70px rgba(0,0,0,.25);
+}
+
+.modal-head{
+    padding:21px 24px;
+    border-bottom:1px solid #e5e9ef;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    background:white;
+    z-index:5;
+}
+
+.modal-head h3{
+    color:#17324d;
+}
+
+.close-btn{
+    border:none;
+    background:#f0f3f6;
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:18px;
+}
+
+.modal-body{
+    padding:24px;
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+.login-box{
+    width:min(420px,100%);
+}
+
+.login-title{
+    text-align:center;
+    margin-bottom:22px;
+}
+
+.login-title h3{
+    font-size:22px;
+    color:#17324d;
+}
+
+.login-title p{
+    color:#7b8798;
+    font-size:13px;
+    margin-top:5px;
+}
+
+.login-actions{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:18px;
+}
+
+/* =========================
+   ADMIN TABS
+========================= */
+
+.tabs{
+    display:flex;
+    gap:8px;
+    border-bottom:1px solid #e3e8ee;
+    margin-bottom:23px;
+    flex-wrap:wrap;
+}
+
+.tab-btn{
+    border:none;
+    background:transparent;
+    padding:11px 15px;
+    cursor:pointer;
+    color:#687587;
+    font-weight:800;
+    border-bottom:3px solid transparent;
+}
+
+.tab-btn.active{
+    color:#087f8c;
+    border-bottom-color:#087f8c;
+}
+
+.tab-content{
+    display:none;
+}
+
+.tab-content.active{
+    display:block;
+}
+
+/* =========================
+   ADMIN FORM
+========================= */
+
+.admin-form{
+    background:#f8fafc;
+    border:1px solid #e4e9ef;
+    border-radius:13px;
+    padding:18px;
+    margin-bottom:22px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr 1fr;
+    gap:13px;
+}
+
+.form-actions{
+    margin-top:15px;
+    display:flex;
+    gap:9px;
+    flex-wrap:wrap;
+}
+
+.secondary-btn{
+    border:1px solid #d6dee7;
+    background:white;
+    color:#475467;
+    padding:11px 18px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:700;
+}
+
+.secondary-btn:hover{
+    background:#f5f7f9;
+}
+
+/* =========================
+   ADMIN TABLE
+========================= */
+
+.admin-table-wrap{
+    overflow:auto;
+    border:1px solid #e4e9ef;
+    border-radius:12px;
+}
+
+.admin-table{
+    min-width:750px;
+}
+
+.action-btn{
+    border:none;
+    padding:7px 11px;
+    border-radius:7px;
+    cursor:pointer;
+    font-size:11px;
+    font-weight:800;
+    margin-right:4px;
+}
+
+.edit-btn{
+    background:#e7f2ff;
+    color:#1769aa;
+}
+
+.delete-btn{
+    background:#ffe9e9;
+    color:#b42318;
+}
+
+/* =========================
+   INFO
+========================= */
+
+.info-box{
+    background:#f1f9fb;
+    border:1px solid #ccebed;
+    border-left:4px solid #087f8c;
+    padding:15px 17px;
+    border-radius:9px;
+    color:#4b6170;
+    font-size:12px;
+    line-height:1.7;
+    margin-top:18px;
+}
+
+.info-box strong{
+    color:#17324d;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+    .sidebar{
+        width:210px;
+    }
+
+    .main{
+        padding:22px;
+    }
+
+    .selector-row{
+        grid-template-columns:1fr;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+}
+
+@media(max-width:650px){
+
+    .topbar{
+        padding:0 15px;
+    }
+
+    .brand-text h1{
+        font-size:16px;
+    }
+
+    .brand-text p{
+        display:none;
+    }
+
+    .sidebar{
+        display:none;
+    }
+
+    .main{
+        padding:16px;
+    }
+
+    .hsp-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .page-header h2{
+        font-size:23px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     TOP BAR
+========================= -->
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <div class="brand-logo">
+            DX
+        </div>
+
+        <div class="brand-text">
+            <h1>DrugXpert AI</h1>
+            <p>AI-Assisted Pharmaceutical Research Platform</p>
+        </div>
+
+    </div>
+
+    <button class="back-btn" onclick="goBack()">
+        ← Back to DrugXpert AI
+    </button>
+
+</header>
+
+
+<div class="layout">
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+    <div class="nav-title">
+        DRUGXPERT AI
+    </div>
+
+    <button class="nav-btn"
+            onclick="window.location.href='index.html'">
+        HSP Compatibility
+    </button>
+
+    <button class="nav-btn"
+            onclick="window.location.href='combined-solubility.html'">
+        Combined Solubility Predictor
+    </button>
+
+    <button class="nav-btn active">
+        Compatible Solvents for Polymer
+    </button>
+
+    <button class="nav-btn"
+            onclick="openAdmin()">
+        Admin Control
+    </button>
+
+    <button class="nav-btn"
+            onclick="showAbout()">
+        About
+    </button>
+
+</aside>
+
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<main class="main">
+
+    <section class="page-header">
+
+        <h2>
+            Compatible Solvents for Polymer
+        </h2>
+
+        <p>
+            HSP-based solvent screening and compatibility ranking
+        </p>
+
+    </section>
+
+
+    <!-- =========================
+         POLYMER SELECTION
+    ========================= -->
+
+    <section class="card">
+
+        <div class="card-title">
+            Select Polymer
+        </div>
+
+        <div class="card-subtitle">
+            Select a polymer from the existing HSP Polymer Database.
+        </div>
+
+        <div class="selector-row">
+
+            <div class="field">
+
+                <label>
+                    Polymer
+                </label>
+
+                <select id="polymerSelect"
+                        onchange="loadPolymer()">
+
+                    <option value="">
+                        -- Select Polymer --
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div>
+                <button class="primary-btn"
+                        onclick="calculateCompatibility()">
+                    Find Compatible Solvents
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Polymer HSP values -->
+
+        <div id="polymerInfo"
+             style="display:none;">
+
+            <div class="hsp-grid">
+
+                <div class="value-card">
+
+                    <div class="value-label">
+                        DISPERSION PARAMETER
+                    </div>
+
+                    <div class="value">
+                        <span id="polyD">
+                            -
+                        </span>
+
+                        <span class="unit">
+                            MPa½
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="value-card">
+
+                    <div class="value-label">
+                        POLAR PARAMETER
+                    </div>
+
+                    <div class="value">
+                        <span id="polyP">
+                            -
+                        </span>
+
+                        <span class="unit">
+                            MPa½
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="value-card">
+
+                    <div class="value-label">
+                        HYDROGEN BONDING PARAMETER
+                    </div>
+
+                    <div class="value">
+                        <span id="polyH">
+                            -
+                        </span>
+
+                        <span class="unit">
+                            MPa½
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         RESULTS
+    ========================= -->
+
+    <section class="card">
+
+        <div class="result-header">
+
+            <div>
+
+                <div class="card-title">
+                    Solvent Compatibility Ranking
+                </div>
+
+                <div class="card-subtitle"
+                     style="margin-bottom:0;">
+                    Results are ranked from lowest Ra to highest Ra.
+                </div>
+
+            </div>
+
+            <div id="selectedPolymerBadge"
+                 class="selected-polymer">
+                No polymer selected
+            </div>
+
+        </div>
+
+
+        <div id="resultContainer">
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🧪
+                </div>
+
+                <h3>
+                    No Results Yet
+                </h3>
+
+                <p>
+                    Select a polymer and click
+                    "Find Compatible Solvents".
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <strong>HSP Interpretation:</strong><br>
+
+            A lower Hansen solubility parameter distance
+            (Ra) indicates greater HSP compatibility between
+            the selected polymer and solvent. Therefore,
+            solvents are ranked from lowest Ra to highest Ra.
+
+        </div>
+
+    </section>
+
+</main>
+
+</div>
+
+
+<!-- =========================
+     ADMIN LOGIN MODAL
+========================= -->
+
+<div id="loginModal"
+     class="modal">
+
+    <div class="modal-box login-box">
+
+        <div class="modal-head">
+
+            <h3>
+                Admin Login
+            </h3>
+
+            <button class="close-btn"
+                    onclick="closeLogin()">
+                ×
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <div class="login-title">
+
+                <h3>
+                    DrugXpert AI
+                </h3>
+
+                <p>
+                    Administrator access
+                </p>
+
+            </div>
+
+
+            <div class="field"
+                 style="margin-bottom:15px;">
+
+                <label>
+                    Username
+                </label>
+
+                <input type="text"
+                       id="adminUsername"
+                       placeholder="Enter username">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Password
+                </label>
+
+                <input type="password"
+                       id="adminPassword"
+                       placeholder="Enter password">
+
+            </div>
+
+
+            <div class="login-actions">
+
+                <button class="primary-btn"
+                        onclick="loginAdmin()">
+                    Login
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     ADMIN PANEL MODAL
+========================= -->
+
+<div id="adminModal"
+     class="modal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <div>
+
+                <h3>
+                    Admin Control
+                </h3>
+
+                <div style="font-size:11px;color:#7b8798;margin-top:3px;">
+                    Manage solvent database and view HSP polymers
+                </div>
+
+            </div>
+
+            <button class="close-btn"
+                    onclick="closeAdmin()">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+            <div class="tabs">
+
+                <button class="tab-btn active"
+                        onclick="switchTab('solventTab',this)">
+                    Solvent Database
+                </button>
+
+                <button class="tab-btn"
+                        onclick="switchTab('polymerTab',this)">
+                    HSP Polymer Database
+                </button>
+
+            </div>
+
+
+            <!-- =========================
+                 SOLVENT TAB
+            ========================= -->
+
+            <div id="solventTab"
+                 class="tab-content active">
+
+                <div class="admin-form">
+
+                    <div class="card-title"
+                         style="font-size:15px;">
+                        Add / Edit Solvent
+                    </div>
+
+                    <div class="card-subtitle"
+                         style="margin-bottom:15px;">
+                        Enter solvent Hansen solubility parameters.
+                    </div>
+
+
+                    <input type="hidden"
+                           id="editSolventId">
+
+
+                    <div class="form-grid">
+
+                        <div class="field">
+
+                            <label>
+                                Solvent Name
+                            </label>
+
+                            <input type="text"
+                                   id="solventName"
+                                   placeholder="e.g. Ethanol">
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                δD
+                            </label>
+
+                            <input type="number"
+                                   id="solventD"
+                                   step="0.01"
+                                   placeholder="Dispersion">
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                δP
+                            </label>
+
+                            <input type="number"
+                                   id="solventP"
+                                   step="0.01"
+                                   placeholder="Polar">
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                δH
+                            </label>
+
+                            <input type="number"
+                                   id="solventH"
+                                   step="0.01"
+                                   placeholder="Hydrogen bonding">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button class="primary-btn"
+                                onclick="saveSolvent()">
+                            Save Solvent
+                        </button>
+
+                        <button class="secondary-btn"
+                                onclick="clearSolventForm()">
+                            Clear
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SOLVENT TABLE -->
+
+                <div class="admin-table-wrap">
+
+                    <table class="admin-table">
+
+                        <thead>
+
+                        <tr>
+
+                            <th>
+                                SOLVENT
+                            </th>
+
+                            <th>
+                                δD
+                            </th>
+
+                            <th>
+                                δP
+                            </th>
+
+                            <th>
+                                δH
+                            </th>
+
+                            <th>
+                                ACTION
+                            </th>
+
+                        </tr>
+
+                        </thead>
+
+                        <tbody id="solventAdminTable">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 POLYMER TAB
+            ========================= -->
+
+            <div id="polymerTab"
+                 class="tab-content">
+
+                <div class="info-box"
+                     style="margin-top:0;margin-bottom:18px;">
+
+                    Polymer data is automatically read from
+                    the existing DrugXpert AI HSP Polymer Database.
+                    You do not need to enter polymer data again here.
+
+                </div>
+
+
+                <div class="admin-table-wrap">
+
+                    <table class="admin-table">
+
+                        <thead>
+
+                        <tr>
+
+                            <th>
+                                POLYMER
+                            </th>
+
+                            <th>
+                                δD
+                            </th>
+
+                            <th>
+                                δP
+                            </th>
+
+                            <th>
+                                δH
+                            </th>
+
+                        </tr>
+
+                        </thead>
+
+                        <tbody id="polymerAdminTable">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   DATABASE KEYS
+========================================================= */
+
+/*
+   IMPORTANT:
+   This is the same polymer database key used by
+   the existing HSP Compatibility feature.
+*/
+
+const POLYMER_KEY = "drugxpert_ai_polymers";
+
+/*
+   Separate database for solvents.
+*/
+
+const SOLVENT_KEY = "drugxpert_ai_solvents";
+
+
+/* =========================================================
+   INITIAL SOLVENT DATABASE
+========================================================= */
+
+const defaultSolvents = [
+
+    {
+        id: cryptoRandomId(),
+        name: "Ethanol",
+        d: 15.8,
+        p: 8.8,
+        h: 19.4
+    },
+
+    {
+        id: cryptoRandomId(),
+        name: "Methanol",
+        d: 15.1,
+        p: 12.3,
+        h: 22.3
+    },
+
+    {
+        id: cryptoRandomId(),
+        name: "Acetone",
+        d: 15.5,
+        p: 10.4,
+        h: 7.0
+    },
+
+    {
+        id: cryptoRandomId(),
+        name: "Isopropanol",
+        d: 15.8,
+        p: 6.1,
+        h: 16.4
+    },
+
+    {
+        id: cryptoRandomId(),
+        name: "Ethyl Acetate",
+        d: 15.8,
+        p: 5.3,
+        h: 7.2
+    },
+
+    {
+        id: cryptoRandomId(),
+        name: "Water",
+        d: 15.5,
+        p: 16.0,
+        h: 42.3
+    }
+
+];
+
+
+/* =========================================================
+   ID GENERATOR
+========================================================= */
+
+function cryptoRandomId(){
+
+    return Date.now().toString(36)
+        + Math.random().toString(36).substring(2,9);
+
+}
+
+
+/* =========================================================
+   DATABASE INITIALIZATION
+========================================================= */
+
+function initializeDatabase(){
+
+    let solvents = localStorage.getItem(SOLVENT_KEY);
+
+    if(!solvents){
+
+        localStorage.setItem(
+            SOLVENT_KEY,
+            JSON.stringify(defaultSolvents)
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   GET SOLVENTS
+========================================================= */
+
+function getSolvents(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem(SOLVENT_KEY)
+        ) || [];
+
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+/* =========================================================
+   SAVE SOLVENTS
+========================================================= */
+
+function saveSolvents(data){
+
+    localStorage.setItem(
+        SOLVENT_KEY,
+        JSON.stringify(data)
+    );
+
+}
+
+
+/* =========================================================
+   GET POLYMERS
+========================================================= */
+
+function getPolymers(){
+
+    /*
+       Existing HSP Compatibility polymer database.
+    */
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem(POLYMER_KEY)
+        ) || [];
+
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD POLYMER DROPDOWN
+========================================================= */
+
+function loadPolymerDropdown(){
+
+    const select =
+        document.getElementById("polymerSelect");
+
+    select.innerHTML =
+        `<option value="">-- Select Polymer --</option>`;
+
+    const polymers = getPolymers();
+
+    polymers.forEach(polymer => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = polymer.id;
+
+        option.textContent = polymer.name;
+
+        select.appendChild(option);
+
+    });
+
+}
+
+
+/* =========================================================
+   LOAD SELECTED POLYMER
+========================================================= */
+
+function loadPolymer(){
+
+    const select =
+        document.getElementById("polymerSelect");
+
+    const polymerId =
+        select.value;
+
+    const polymers =
+        getPolymers();
+
+    const polymer =
+        polymers.find(
+            p => String(p.id) === String(polymerId)
+        );
+
+
+    if(!polymer){
+
+        document.getElementById("polymerInfo").style.display =
+            "none";
+
+        document.getElementById("selectedPolymerBadge")
+            .textContent =
+            "No polymer selected";
+
+        return;
+
+    }
+
+
+    document.getElementById("polymerInfo")
+        .style.display = "block";
+
+
+    document.getElementById("polyD")
+        .textContent = formatNumber(polymer.d);
+
+
+    document.getElementById("polyP")
+        .textContent = formatNumber(polymer.p);
+
+
+    document.getElementById("polyH")
+        .textContent = formatNumber(polymer.h);
+
+
+    document.getElementById("selectedPolymerBadge")
+        .textContent =
+        polymer.name;
+
+}
+
+
+/* =========================================================
+   HSP RA CALCULATION
+========================================================= */
+
+function calculateRa(polymer, solvent){
+
+    const dDifference =
+        Number(polymer.d) - Number(solvent.d);
+
+    const pDifference =
+        Number(polymer.p) - Number(solvent.p);
+
+    const hDifference =
+        Number(polymer.h) - Number(solvent.h);
+
+
+    return Math.sqrt(
+        4 * Math.pow(dDifference,2)
+        +
+        Math.pow(pDifference,2)
+        +
+        Math.pow(hDifference,2)
+    );
+
+}
+
+
+/* =========================================================
+   COMPATIBILITY CATEGORY
+========================================================= */
+
+function getCompatibility(ra){
+
+    /*
+       These labels are software interpretation bands.
+       The actual ranking is always based on numerical Ra.
+    */
+
+    if(ra <= 2){
+
+        return {
+            label:"Excellent",
+            className:"excellent"
+        };
+
+    }
+
+    if(ra <= 4){
+
+        return {
+            label:"Good",
+            className:"good"
+        };
+
+    }
+
+    if(ra <= 7){
+
+        return {
+            label:"Moderate",
+            className:"moderate"
+        };
+
+    }
+
+    return {
+        label:"Low",
+        className:"low"
+    };
+
+}
+
+
+/* =========================================================
+   CALCULATE COMPATIBILITY
+========================================================= */
+
+function calculateCompatibility(){
+
+    const select =
+        document.getElementById("polymerSelect");
+
+    const polymerId =
+        select.value;
+
+
+    if(!polymerId){
+
+        alert("Please select a polymer first.");
+
+        return;
+
+    }
+
+
+    const polymers =
+        getPolymers();
+
+    const polymer =
+        polymers.find(
+            p => String(p.id) === String(polymerId)
+        );
+
+
+    if(!polymer){
+
+        alert("Selected polymer was not found.");
+
+        return;
+
+    }
+
+
+    const solvents =
+        getSolvents();
+
+
+    if(solvents.length === 0){
+
+        alert(
+            "No solvents are available in the database. Please add solvents from Admin Control."
+        );
+
+        return;
+
+    }
+
+
+    const results =
+        solvents.map(solvent => {
+
+            const ra =
+                calculateRa(polymer,solvent);
+
+            return {
+
+                ...solvent,
+
+                ra:ra
+
+            };
+
+        });
+
+
+    /*
+       Lowest Ra = highest compatibility
+    */
+
+    results.sort(
+        (a,b) => a.ra - b.ra
+    );
+
+
+    renderResults(
+        polymer,
+        results
+    );
+
+}
+
+
+/* =========================================================
+   RENDER RESULTS
+========================================================= */
+
+function renderResults(polymer,results){
+
+    const container =
+        document.getElementById("resultContainer");
+
+
+    document.getElementById("selectedPolymerBadge")
+        .textContent =
+        polymer.name;
+
+
+    let html = `
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            RANK
+                        </th>
+
+                        <th>
+                            SOLVENT
+                        </th>
+
+                        <th>
+                            δD
+                        </th>
+
+                        <th>
+                            δP
+                        </th>
+
+                        <th>
+                            δH
+                        </th>
+
+                        <th>
+                            Ra
+                        </th>
+
+                        <th>
+                            COMPATIBILITY
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+    `;
+
+
+    results.forEach((item,index) => {
+
+        const compatibility =
+            getCompatibility(item.ra);
+
+
+        html += `
+
+            <tr>
+
+                <td>
+
+                    <div class="rank ${index === 0 ? "first" : ""}">
+                        ${index + 1}
+                    </div>
+
+                </td>
+
+
+                <td>
+
+                    <strong>
+                        ${escapeHtml(item.name)}
+                    </strong>
+
+                </td>
+
+
+                <td>
+                    ${formatNumber(item.d)}
+                </td>
+
+
+                <td>
+                    ${formatNumber(item.p)}
+                </td>
+
+
+                <td>
+                    ${formatNumber(item.h)}
+                </td>
+
+
+                <td>
+
+                    <span class="ra">
+                        ${item.ra.toFixed(3)}
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <span class="compatibility ${compatibility.className}">
+                        ${compatibility.label}
+                    </span>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+
+    html += `
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    `;
+
+
+    container.innerHTML = html;
+
+}
+
+
+/* =========================================================
+   FORMAT NUMBER
+========================================================= */
+
+function formatNumber(value){
+
+    const num =
+        Number(value);
+
+    if(!Number.isFinite(num)){
+
+        return "-";
+
+    }
+
+    return num.toFixed(2);
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================================
+   ADMIN LOGIN
+========================================================= */
+
+function openAdmin(){
+
+    document.getElementById("loginModal")
+        .classList.add("show");
+
+}
+
+
+function closeLogin(){
+
+    document.getElementById("loginModal")
+        .classList.remove("show");
+
+}
+
+
+function loginAdmin(){
+
+    const username =
+        document.getElementById("adminUsername").value.trim();
+
+    const password =
+        document.getElementById("adminPassword").value;
+
+
+    if(
+        username === "admin"
+        &&
+        password === "DrugXpert@123"
+    ){
+
+        closeLogin();
+
+        document.getElementById("adminModal")
+            .classList.add("show");
+
+        renderSolventAdminTable();
+
+        renderPolymerAdminTable();
+
+    }else{
+
+        alert("Invalid username or password.");
+
+    }
+
+}
+
+
+function closeAdmin(){
+
+    document.getElementById("adminModal")
+        .classList.remove("show");
+
+}
+
+
+/* =========================================================
+   ADMIN TABS
+========================================================= */
+
+function switchTab(tabId,button){
+
+    document.querySelectorAll(".tab-content")
+        .forEach(tab => {
+
+            tab.classList.remove("active");
+
+        });
+
+
+    document.querySelectorAll(".tab-btn")
+        .forEach(btn => {
+
+            btn.classList.remove("active");
+
+        });
+
+
+    document.getElementById(tabId)
+        .classList.add("active");
+
+
+    button.classList.add("active");
+
+}
+
+
+/* =========================================================
+   RENDER SOLVENT ADMIN TABLE
+========================================================= */
+
+function renderSolventAdminTable(){
+
+    const tbody =
+        document.getElementById("solventAdminTable");
+
+    const solvents =
+        getSolvents();
+
+
+    if(solvents.length === 0){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td colspan="5"
+                    style="text-align:center;padding:25px;color:#8994a4;">
+                    No solvents added yet.
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML = solvents.map(solvent => `
+
+        <tr>
+
+            <td>
+                <strong>
+                    ${escapeHtml(solvent.name)}
+                </strong>
+            </td>
+
+            <td>
+                ${formatNumber(solvent.d)}
+            </td>
+
+            <td>
+                ${formatNumber(solvent.p)}
+            </td>
+
+            <td>
+                ${formatNumber(solvent.h)}
+            </td>
+
+            <td>
+
+                <button class="action-btn edit-btn"
+                        onclick="editSolvent('${solvent.id}')">
+                    Edit
+                </button>
+
+                <button class="action-btn delete-btn"
+                        onclick="deleteSolvent('${solvent.id}')">
+                    Delete
+                </button>
+
+            </td>
+
+        </tr>
+
+    `).join("");
+
+}
+
+
+/* =========================================================
+   SAVE SOLVENT
+========================================================= */
+
+function saveSolvent(){
+
+    const name =
+        document.getElementById("solventName")
+            .value.trim();
+
+    const d =
+        Number(document.getElementById("solventD").value);
+
+    const p =
+        Number(document.getElementById("solventP").value);
+
+    const h =
+        Number(document.getElementById("solventH").value);
+
+    const editId =
+        document.getElementById("editSolventId").value;
+
+
+    if(!name){
+
+        alert("Please enter solvent name.");
+
+        return;
+
+    }
+
+
+    if(
+        !Number.isFinite(d)
+        ||
+        !Number.isFinite(p)
+        ||
+        !Number.isFinite(h)
+    ){
+
+        alert(
+            "Please enter valid δD, δP and δH values."
+        );
+
+        return;
+
+    }
+
+
+    let solvents =
+        getSolvents();
+
+
+    if(editId){
+
+        const index =
+            solvents.findIndex(
+                s => String(s.id) === String(editId)
+            );
+
+
+        if(index !== -1){
+
+            solvents[index] = {
+
+                ...solvents[index],
+
+                name:name,
+                d:d,
+                p:p,
+                h:h
+
+            };
+
+        }
+
+    }else{
+
+        solvents.push({
+
+            id:cryptoRandomId(),
+
+            name:name,
+
+            d:d,
+
+            p:p,
+
+            h:h
+
+        });
+
+    }
+
+
+    saveSolvents(solvents);
+
+
+    clearSolventForm();
+
+    renderSolventAdminTable();
+
+
+    alert(
+        editId
+            ? "Solvent updated successfully."
+            : "Solvent added successfully."
+    );
+
+}
+
+
+/* =========================================================
+   EDIT SOLVENT
+========================================================= */
+
+function editSolvent(id){
+
+    const solvents =
+        getSolvents();
+
+
+    const solvent =
+        solvents.find(
+            s => String(s.id) === String(id)
+        );
+
+
+    if(!solvent){
+
+        return;
+
+    }
+
+
+    document.getElementById("editSolventId")
+        .value = solvent.id;
+
+
+    document.getElementById("solventName")
+        .value = solvent.name;
+
+
+    document.getElementById("solventD")
+        .value = solvent.d;
+
+
+    document.getElementById("solventP")
+        .value = solvent.p;
+
+
+    document.getElementById("solventH")
+        .value = solvent.h;
+
+
+    document.getElementById("solventName")
+        .focus();
+
+}
+
+
+/* =========================================================
+   DELETE SOLVENT
+========================================================= */
+
+function deleteSolvent(id){
+
+    const solvents =
+        getSolvents();
+
+
+    const solvent =
+        solvents.find(
+            s => String(s.id) === String(id)
+        );
+
+
+    if(!solvent){
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+            `Delete "${solvent.name}" from the solvent database?`
+        );
+
+
+    if(!confirmed){
+
+        return;
+
+    }
+
+
+    const updated =
+        solvents.filter(
+            s => String(s.id) !== String(id)
+        );
+
+
+    saveSolvents(updated);
+
+    renderSolventAdminTable();
+
+
+    /*
+       Refresh results if a polymer is selected.
+    */
+
+    if(document.getElementById("polymerSelect").value){
+
+        calculateCompatibility();
+
+    }
+
+}
+
+
+/* =========================================================
+   CLEAR SOLVENT FORM
+========================================================= */
+
+function clearSolventForm(){
+
+    document.getElementById("editSolventId")
+        .value = "";
+
+    document.getElementById("solventName")
+        .value = "";
+
+    document.getElementById("solventD")
+        .value = "";
+
+    document.getElementById("solventP")
+        .value = "";
+
+    document.getElementById("solventH")
+        .value = "";
+
+}
+
+
+/* =========================================================
+   RENDER POLYMER ADMIN TABLE
+========================================================= */
+
+function renderPolymerAdminTable(){
+
+    const tbody =
+        document.getElementById("polymerAdminTable");
+
+    const polymers =
+        getPolymers();
+
+
+    if(polymers.length === 0){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td colspan="4"
+                    style="text-align:center;padding:25px;color:#8994a4;">
+
+                    No polymers found in the HSP Polymer Database.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML = polymers.map(polymer => `
+
+        <tr>
+
+            <td>
+
+                <strong>
+                    ${escapeHtml(polymer.name)}
+                </strong>
+
+            </td>
+
+            <td>
+                ${formatNumber(polymer.d)}
+            </td>
+
+            <td>
+                ${formatNumber(polymer.p)}
+            </td>
+
+            <td>
+                ${formatNumber(polymer.h)}
+            </td>
+
+        </tr>
+
+    `).join("");
+
+}
+
+
+/* =========================================================
+   ABOUT
+========================================================= */
+
+function showAbout(){
+
+    alert(
+        "DrugXpert AI\\n\\n" +
+        "Compatible Solvents for Polymer\\n\\n" +
+        "This module uses Hansen Solubility Parameters " +
+        "to calculate polymer-solvent compatibility " +
+        "and rank solvents according to Ra."
+    );
+
+}
+
+
+/* =========================================================
+   BACK
+========================================================= */
+
+function goBack(){
+
+    window.location.href = "index.html";
+
+}
+
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        initializeDatabase();
+
+        loadPolymerDropdown();
+
+    }
+);
+
+
+/* =========================================================
+   REFRESH WHEN PAGE BECOMES VISIBLE
+========================================================= */
+
+window.addEventListener(
+    "storage",
+    function(event){
+
+        if(event.key === POLYMER_KEY){
+
+            loadPolymerDropdown();
+
+            renderPolymerAdminTable();
+
+        }
+
+
+        if(event.key === SOLVENT_KEY){
+
+            if(document.getElementById("polymerSelect").value){
+
+                calculateCompatibility();
+
+            }
+
+            renderSolventAdminTable();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
