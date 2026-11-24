@@ -1,0 +1,3003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DrugXpert AI - Combined Solubility Predictor</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f7fb;
+    color:#172033;
+}
+
+button,input,select{
+    font-family:inherit;
+}
+
+.topbar{
+    background:#0f172a;
+    color:white;
+    padding:17px 24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:50;
+}
+
+.brand{
+    font-size:21px;
+    font-weight:800;
+}
+
+.sub{
+    font-size:12px;
+    opacity:.75;
+    margin-top:4px;
+}
+
+.container{
+    max-width:1200px;
+    margin:28px auto;
+    padding:0 18px;
+}
+
+.card{
+    background:white;
+    border:1px solid #e3e8ef;
+    border-radius:16px;
+    padding:22px;
+    margin-bottom:20px;
+    box-shadow:0 6px 22px rgba(15,23,42,.06);
+}
+
+.hero{
+    background:linear-gradient(135deg,#0f172a,#1d4ed8);
+    color:white;
+    border:0;
+}
+
+.hero h1{
+    margin-bottom:8px;
+    font-size:28px;
+}
+
+.hero p{
+    line-height:1.5;
+    opacity:.92;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+}
+
+.grid3{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:16px;
+}
+
+label{
+    display:block;
+    font-weight:700;
+    font-size:13px;
+    margin-bottom:7px;
+}
+
+input,
+select{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid #cfd6e1;
+    border-radius:9px;
+    background:white;
+}
+
+input:focus,
+select:focus{
+    outline:2px solid #c7d2fe;
+    border-color:#6366f1;
+}
+
+.btn{
+    border:0;
+    border-radius:10px;
+    padding:11px 17px;
+    cursor:pointer;
+    font-weight:800;
+}
+
+.primary{
+    background:#2563eb;
+    color:white;
+}
+
+.secondary{
+    background:#e9eef7;
+    color:#172033;
+}
+
+.danger{
+    background:#dc2626;
+    color:white;
+}
+
+.actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:16px;
+}
+
+.material-card{
+    border-left:5px solid #2563eb;
+}
+
+.descriptors{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
+    margin-top:14px;
+}
+
+.metric{
+    background:#f7f9fc;
+    border:1px solid #e5eaf1;
+    border-radius:10px;
+    padding:12px;
+}
+
+.metric .k{
+    font-size:11px;
+    color:#667085;
+}
+
+.metric .v{
+    font-weight:800;
+    margin-top:5px;
+}
+
+.esol-box{
+    margin-top:15px;
+    background:#f8fafc;
+    border:1px solid #dbe5f1;
+    border-radius:12px;
+    padding:15px;
+}
+
+.esol-title{
+    font-size:12px;
+    color:#667085;
+    font-weight:800;
+    text-transform:uppercase;
+}
+
+.esol-value{
+    font-size:22px;
+    font-weight:900;
+    margin-top:6px;
+    color:#1d4ed8;
+}
+
+.weight-box{
+    background:#f8fafc;
+    border:1px solid #e5eaf1;
+    border-radius:12px;
+    padding:14px;
+    margin-top:14px;
+}
+
+.weight-values{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:10px;
+    margin-top:10px;
+}
+
+.weight-item{
+    background:white;
+    border:1px solid #e5eaf1;
+    border-radius:10px;
+    padding:12px;
+}
+
+.weight-item .k{
+    font-size:11px;
+    color:#667085;
+}
+
+.weight-item .v{
+    font-size:18px;
+    font-weight:900;
+    margin-top:5px;
+}
+
+.predict-wrap{
+    display:flex;
+    justify-content:center;
+    margin-top:22px;
+}
+
+.predict-btn{
+    width:min(100%,560px);
+    font-size:17px;
+    padding:15px 22px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    color:white;
+    box-shadow:0 8px 20px rgba(37,99,235,.25);
+}
+
+.result{
+    display:none;
+    background:linear-gradient(135deg,#eff6ff,#f8fafc);
+    border:1px solid #bfdbfe;
+    border-radius:16px;
+    padding:22px;
+    margin-top:20px;
+}
+
+.result.show{
+    display:block;
+}
+
+.result-title{
+    font-size:13px;
+    color:#475467;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+}
+
+.big{
+    font-size:32px;
+    font-weight:900;
+    color:#0f172a;
+    margin-top:7px;
+}
+
+.final-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+    margin-top:18px;
+}
+
+.final-box{
+    background:white;
+    border:1px solid #dbe5f1;
+    border-radius:12px;
+    padding:15px;
+}
+
+.final-box .k{
+    font-size:11px;
+    color:#667085;
+}
+
+.final-box .v{
+    font-size:19px;
+    font-weight:850;
+    margin-top:5px;
+}
+
+.error{
+    color:#991b1b;
+    background:#fff1f2;
+    border:1px solid #fecaca;
+    border-radius:10px;
+    padding:13px;
+    margin-top:15px;
+}
+
+.good{
+    color:#166534;
+    background:#f0fdf4;
+    border:1px solid #bbf7d0;
+    border-radius:10px;
+    padding:13px;
+    margin-top:15px;
+}
+
+.small{
+    font-size:12px;
+    color:#667085;
+    line-height:1.5;
+}
+
+
+/* ADMIN */
+
+.overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.62);
+    z-index:100;
+    padding:25px 15px;
+    overflow:auto;
+}
+
+.overlay.show{
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+}
+
+.admin-modal{
+    width:min(1180px,100%);
+    background:white;
+    border-radius:18px;
+    padding:24px;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+    margin-top:20px;
+}
+
+.modal-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+}
+
+.close{
+    border:0;
+    background:#eef2f7;
+    border-radius:50%;
+    width:38px;
+    height:38px;
+    cursor:pointer;
+    font-size:20px;
+}
+
+.admin-tabs{
+    display:flex;
+    gap:8px;
+    margin-top:20px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.tab{
+    border:0;
+    background:transparent;
+    padding:12px 16px;
+    cursor:pointer;
+    font-weight:800;
+    color:#667085;
+}
+
+.tab.active{
+    color:#2563eb;
+    border-bottom:3px solid #2563eb;
+}
+
+.tabpane{
+    display:none;
+    padding-top:20px;
+}
+
+.tabpane.active{
+    display:block;
+}
+
+.table-wrap{
+    overflow:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+    font-size:13px;
+    min-width:700px;
+}
+
+th,
+td{
+    border-bottom:1px solid #e5e7eb;
+    padding:10px;
+    text-align:left;
+}
+
+th{
+    background:#f8fafc;
+}
+
+@media(max-width:800px){
+
+    .grid,
+    .grid3,
+    .final-grid{
+        grid-template-columns:1fr;
+    }
+
+    .descriptors{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .weight-values{
+        grid-template-columns:1fr;
+    }
+
+    .topbar{
+        padding:15px;
+    }
+
+    .brand{
+        font-size:18px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     TOP BAR
+===================================================== -->
+
+<div class="topbar">
+
+    <div>
+
+        <div class="brand">
+            💊 DrugXpert AI
+        </div>
+
+        <div class="sub">
+            Combined Solubility Predictor
+        </div>
+
+    </div>
+
+
+    <button
+        class="btn secondary"
+        onclick="openAdmin()">
+
+        ⚙ Admin Control
+
+    </button>
+
+</div>
+
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<div class="card hero">
+
+    <h1>
+        Combined Solubility Predictor
+    </h1>
+
+    <p>
+        Predict combined solubility of 2 or 3 materials
+        using ESOL Log S values and log-linear ratio mixing.
+    </p>
+
+</div>
+
+
+
+<!-- =====================================================
+     MATERIAL COUNT + RATIO
+===================================================== -->
+
+<div class="card">
+
+    <div class="grid">
+
+        <div>
+
+            <label>
+                Number of Materials
+            </label>
+
+            <select
+                id="materialCount"
+                onchange="renderMaterialInputs()">
+
+                <option value="2">
+                    2 Materials
+                </option>
+
+                <option value="3">
+                    3 Materials
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div>
+
+            <label>
+                Molar Ratio
+            </label>
+
+            <select
+                id="ratioPreset"
+                onchange="ratioChanged()">
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="customRatioBox"
+        style="display:none;margin-top:16px">
+    </div>
+
+
+    <div
+        id="weightDisplay"
+        class="weight-box">
+
+        Select materials and ratio.
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     MATERIALS
+===================================================== -->
+
+<div id="materialsArea"></div>
+
+
+
+<!-- =====================================================
+     PREDICT
+===================================================== -->
+
+<div class="card">
+
+    <h3>
+        Final Prediction
+    </h3>
+
+    <div class="small">
+        Click the button to calculate the predicted combined solubility.
+    </div>
+
+
+    <div class="predict-wrap">
+
+        <button
+            class="btn predict-btn"
+            onclick="calculate()">
+
+            🔬 Predict Combined Solubility
+
+        </button>
+
+    </div>
+
+
+    <div id="result"></div>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     ADMIN MODAL
+===================================================== -->
+
+<div
+    class="overlay"
+    id="adminOverlay">
+
+
+<div class="admin-modal">
+
+
+<div class="modal-head">
+
+<div>
+
+<h2>
+    Admin Control
+</h2>
+
+<div class="small">
+    Manage HSP and Combined Solubility databases.
+</div>
+
+</div>
+
+
+<button
+    class="close"
+    onclick="closeAdmin()">
+
+    ×
+
+</button>
+
+</div>
+
+
+
+<!-- LOGIN -->
+
+<div
+    id="loginBox"
+    style="margin-top:20px">
+
+
+<div class="grid">
+
+<div>
+
+<label>
+    Username
+</label>
+
+<input
+    id="adminUser"
+    autocomplete="username">
+
+</div>
+
+
+<div>
+
+<label>
+    Password
+</label>
+
+<input
+    id="adminPass"
+    type="password"
+    autocomplete="current-password">
+
+</div>
+
+</div>
+
+
+<div class="actions">
+
+<button
+    class="btn primary"
+    onclick="adminLogin()">
+
+    Login
+
+</button>
+
+</div>
+
+
+<div
+    id="loginMsg"
+    class="error"
+    style="display:none">
+
+</div>
+
+</div>
+
+
+
+<!-- ADMIN CONTENT -->
+
+<div
+    id="adminContent"
+    style="display:none">
+
+
+<div class="admin-tabs">
+
+<button
+    class="tab active"
+    onclick="showAdminTab('hsp',this)">
+
+    HSP Compatibility Control
+
+</button>
+
+
+<button
+    class="tab"
+    onclick="showAdminTab('sol',this)">
+
+    Combined Solubility Control
+
+</button>
+
+</div>
+
+
+
+<!-- =====================================================
+     HSP TAB
+===================================================== -->
+
+<div
+    id="hspTab"
+    class="tabpane active">
+
+
+<h3>
+    HSP Drug Database
+</h3>
+
+
+<div class="grid">
+
+<div>
+
+<label>
+    Drug Name
+</label>
+
+<input
+    id="hDrugName"
+    placeholder="e.g. Deflazacort">
+
+</div>
+
+
+<div>
+
+<label>
+    δD (MPa½)
+</label>
+
+<input
+    id="hDrugD"
+    type="number"
+    step="any">
+
+</div>
+
+
+<div>
+
+<label>
+    δP (MPa½)
+</label>
+
+<input
+    id="hDrugP"
+    type="number"
+    step="any">
+
+</div>
+
+
+<div>
+
+<label>
+    δH (MPa½)
+</label>
+
+<input
+    id="hDrugH"
+    type="number"
+    step="any">
+
+</div>
+
+</div>
+
+
+<div class="actions">
+
+<button
+    class="btn primary"
+    onclick="saveHSPDrug()">
+
+    Add / Update Drug
+
+</button>
+
+
+<button
+    class="btn secondary"
+    onclick="clearHSPDrug()">
+
+    Clear
+
+</button>
+
+</div>
+
+
+<div
+    id="hDrugMsg"
+    class="small">
+</div>
+
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Drug</th>
+<th>δD</th>
+<th>δP</th>
+<th>δH</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody
+    id="hDrugTable">
+</tbody>
+
+</table>
+
+</div>
+
+
+
+<h3 style="margin-top:28px">
+    HSP Polymer Database
+</h3>
+
+
+<div class="grid">
+
+<div>
+
+<label>
+    Polymer Name
+</label>
+
+<input
+    id="hPolyName"
+    placeholder="e.g. PVP K30">
+
+</div>
+
+
+<div>
+
+<label>
+    δD (MPa½)
+</label>
+
+<input
+    id="hPolyD"
+    type="number"
+    step="any">
+
+</div>
+
+
+<div>
+
+<label>
+    δP (MPa½)
+</label>
+
+<input
+    id="hPolyP"
+    type="number"
+    step="any">
+
+</div>
+
+
+<div>
+
+<label>
+    δH (MPa½)
+</label>
+
+<input
+    id="hPolyH"
+    type="number"
+    step="any">
+
+</div>
+
+</div>
+
+
+<div class="actions">
+
+<button
+    class="btn primary"
+    onclick="saveHSPPoly()">
+
+    Add / Update Polymer
+
+</button>
+
+
+<button
+    class="btn secondary"
+    onclick="clearHSPPoly()">
+
+    Clear
+
+</button>
+
+</div>
+
+
+<div
+    id="hPolyMsg"
+    class="small">
+</div>
+
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Polymer</th>
+<th>δD</th>
+<th>δP</th>
+<th>δH</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody
+    id="hPolyTable">
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+
+<!-- =====================================================
+     SOLUBILITY TAB
+===================================================== -->
+
+<div
+    id="solTab"
+    class="tabpane">
+
+
+<h3>
+    Combined Solubility Material Database
+</h3>
+
+
+<div class="grid">
+
+<div>
+
+<label>
+    Material Name
+</label>
+
+<input
+    id="mName"
+    placeholder="e.g. Deflazacort">
+
+</div>
+
+
+<div>
+
+<label>
+    LogP
+</label>
+
+<input
+    id="mLogP"
+    type="number"
+    step="any">
+
+</div>
+
+
+<div>
+
+<label>
+    Molecular Weight (g/mol)
+</label>
+
+<input
+    id="mMW"
+    type="number"
+    step="any">
+
+</div>
+
+
+<div>
+
+<label>
+    Aromatic Proportion (AP)
+</label>
+
+<input
+    id="mAP"
+    type="number"
+    step="any">
+
+</div>
+
+
+<div>
+
+<label>
+    Rotatable Bonds (RB)
+</label>
+
+<input
+    id="mRB"
+    type="number"
+    step="any">
+
+</div>
+
+</div>
+
+
+<div class="small"
+     style="margin-top:10px">
+
+    Log S is automatically calculated from the entered descriptors.
+
+</div>
+
+
+<div class="actions">
+
+<button
+    class="btn primary"
+    onclick="saveSolMaterial()">
+
+    Add / Update Material
+
+</button>
+
+
+<button
+    class="btn secondary"
+    onclick="clearSolForm()">
+
+    Clear
+
+</button>
+
+</div>
+
+
+<div
+    id="solMsg"
+    class="small">
+</div>
+
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Material</th>
+<th>LogP</th>
+<th>MW</th>
+<th>AP</th>
+<th>RB</th>
+<th>Log S</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody
+    id="solTable">
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+
+<div class="actions"
+     style="border-top:1px solid #e5e7eb;padding-top:16px">
+
+<button
+    class="btn danger"
+    onclick="adminLogout()">
+
+    Logout
+
+</button>
+
+</div>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================================
+   DATABASE KEYS
+===================================================== */
+
+const SOL_DB_KEY =
+"drugxpert_solubility_database_v1";
+
+const HSP_DRUG_DB_KEY =
+"drugxpert_hsp_drugs_v1";
+
+const HSP_POLY_DB_KEY =
+"drugxpert_hsp_polymers_v1";
+
+
+/* =====================================================
+   ADMIN LOGIN
+===================================================== */
+
+const ADMIN_USER =
+"admin";
+
+const ADMIN_PASS =
+"DrugXpert@123";
+
+
+/* =====================================================
+   DEFAULT DATABASE
+===================================================== */
+
+let solDB = loadDB(
+    SOL_DB_KEY,
+    [
+        {
+            name:"Demo Drug A",
+            logP:2.50,
+            mw:300,
+            ap:0.40,
+            rb:3
+        },
+
+        {
+            name:"Demo Material B",
+            logP:1.20,
+            mw:600,
+            ap:0.10,
+            rb:8
+        },
+
+        {
+            name:"Demo Material C",
+            logP:1.80,
+            mw:450,
+            ap:0.25,
+            rb:5
+        }
+    ]
+);
+
+
+let hspDrugDB = loadDB(
+    HSP_DRUG_DB_KEY,
+    [
+        {
+            name:"Demo Drug A",
+            d:18,
+            p:7,
+            h:10
+        },
+
+        {
+            name:"Deflazacort",
+            d:18.2,
+            p:8.1,
+            h:10.5
+        }
+    ]
+);
+
+
+let hspPolyDB = loadDB(
+    HSP_POLY_DB_KEY,
+    [
+        {
+            name:"PVP K30",
+            d:17.5,
+            p:8.5,
+            h:12.5
+        },
+
+        {
+            name:"Soluplus",
+            d:18.0,
+            p:7.0,
+            h:9.5
+        },
+
+        {
+            name:"PEG 6000",
+            d:17.0,
+            p:5.5,
+            h:10.0
+        }
+    ]
+);
+
+
+let editingSol = -1;
+
+let editingHDrug = -1;
+
+let editingHPoly = -1;
+
+
+/* =====================================================
+   DATABASE
+===================================================== */
+
+function loadDB(key,fallback){
+
+    try{
+
+        const raw =
+        localStorage.getItem(key);
+
+        if(raw){
+
+            return JSON.parse(raw);
+
+        }
+
+    }
+
+    catch(e){
+
+        console.error(e);
+
+    }
+
+
+    localStorage.setItem(
+        key,
+        JSON.stringify(fallback)
+    );
+
+    return fallback;
+
+}
+
+
+function saveAny(key,data){
+
+    localStorage.setItem(
+        key,
+        JSON.stringify(data)
+    );
+
+}
+
+
+/* =====================================================
+   ADMIN
+===================================================== */
+
+function openAdmin(){
+
+    document
+    .getElementById("adminOverlay")
+    .classList.add("show");
+
+}
+
+
+function closeAdmin(){
+
+    document
+    .getElementById("adminOverlay")
+    .classList.remove("show");
+
+}
+
+
+function adminLogin(){
+
+    const username =
+    document.getElementById("adminUser").value.trim();
+
+    const password =
+    document.getElementById("adminPass").value;
+
+    const msg =
+    document.getElementById("loginMsg");
+
+
+    if(
+        username === ADMIN_USER &&
+        password === ADMIN_PASS
+    ){
+
+        document
+        .getElementById("loginBox")
+        .style.display = "none";
+
+
+        document
+        .getElementById("adminContent")
+        .style.display = "block";
+
+
+        msg.style.display = "none";
+
+
+        renderAllAdminTables();
+
+    }
+
+    else{
+
+        msg.textContent =
+        "Invalid username or password.";
+
+        msg.style.display = "block";
+
+    }
+
+}
+
+
+function adminLogout(){
+
+    document
+    .getElementById("loginBox")
+    .style.display = "block";
+
+
+    document
+    .getElementById("adminContent")
+    .style.display = "none";
+
+
+    document
+    .getElementById("adminUser")
+    .value = "";
+
+
+    document
+    .getElementById("adminPass")
+    .value = "";
+
+}
+
+
+function showAdminTab(which,btn){
+
+    document
+    .querySelectorAll(".tab")
+    .forEach(
+        x => x.classList.remove("active")
+    );
+
+
+    document
+    .querySelectorAll(".tabpane")
+    .forEach(
+        x => x.classList.remove("active")
+    );
+
+
+    btn.classList.add("active");
+
+
+    document
+    .getElementById(
+        which === "hsp"
+        ? "hspTab"
+        : "solTab"
+    )
+    .classList.add("active");
+
+}
+
+
+/* =====================================================
+   HSP DRUG
+===================================================== */
+
+function saveHSPDrug(){
+
+    const x = {
+
+        name:
+        document.getElementById("hDrugName").value.trim(),
+
+        d:
+        Number(
+            document.getElementById("hDrugD").value
+        ),
+
+        p:
+        Number(
+            document.getElementById("hDrugP").value
+        ),
+
+        h:
+        Number(
+            document.getElementById("hDrugH").value
+        )
+
+    };
+
+
+    if(
+        !x.name ||
+        ![x.d,x.p,x.h].every(Number.isFinite)
+    ){
+
+        setMsg(
+            "hDrugMsg",
+            "Enter Drug Name, δD, δP and δH.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(editingHDrug < 0){
+
+        hspDrugDB.push(x);
+
+    }
+
+    else{
+
+        hspDrugDB[editingHDrug] = x;
+
+    }
+
+
+    saveAny(
+        HSP_DRUG_DB_KEY,
+        hspDrugDB
+    );
+
+
+    editingHDrug = -1;
+
+    clearHSPDrug();
+
+    renderHDrugTable();
+
+    setMsg(
+        "hDrugMsg",
+        "HSP drug saved successfully.",
+        "good"
+    );
+
+}
+
+
+function clearHSPDrug(){
+
+    document.getElementById("hDrugName").value = "";
+
+    document.getElementById("hDrugD").value = "";
+
+    document.getElementById("hDrugP").value = "";
+
+    document.getElementById("hDrugH").value = "";
+
+    editingHDrug = -1;
+
+}
+
+
+function editHSPDrug(i){
+
+    const x = hspDrugDB[i];
+
+    editingHDrug = i;
+
+    document.getElementById("hDrugName").value = x.name;
+
+    document.getElementById("hDrugD").value = x.d;
+
+    document.getElementById("hDrugP").value = x.p;
+
+    document.getElementById("hDrugH").value = x.h;
+
+}
+
+
+function deleteHSPDrug(i){
+
+    if(
+        confirm(
+            "Delete " +
+            hspDrugDB[i].name +
+            "?"
+        )
+    ){
+
+        hspDrugDB.splice(i,1);
+
+        saveAny(
+            HSP_DRUG_DB_KEY,
+            hspDrugDB
+        );
+
+        renderHDrugTable();
+
+    }
+
+}
+
+
+function renderHDrugTable(){
+
+    document.getElementById(
+        "hDrugTable"
+    ).innerHTML =
+
+    hspDrugDB.map(
+        (x,i) => `
+
+        <tr>
+
+        <td>${esc(x.name)}</td>
+
+        <td>${fmt(x.d)}</td>
+
+        <td>${fmt(x.p)}</td>
+
+        <td>${fmt(x.h)}</td>
+
+        <td>
+
+        <button
+        class="btn secondary"
+        onclick="editHSPDrug(${i})">
+
+        Edit
+
+        </button>
+
+        <button
+        class="btn danger"
+        onclick="deleteHSPDrug(${i})">
+
+        Delete
+
+        </button>
+
+        </td>
+
+        </tr>
+
+        `
+    ).join("");
+
+}
+
+
+/* =====================================================
+   HSP POLYMER
+===================================================== */
+
+function saveHSPPoly(){
+
+    const x = {
+
+        name:
+        document.getElementById("hPolyName").value.trim(),
+
+        d:
+        Number(
+            document.getElementById("hPolyD").value
+        ),
+
+        p:
+        Number(
+            document.getElementById("hPolyP").value
+        ),
+
+        h:
+        Number(
+            document.getElementById("hPolyH").value
+        )
+
+    };
+
+
+    if(
+        !x.name ||
+        ![x.d,x.p,x.h].every(Number.isFinite)
+    ){
+
+        setMsg(
+            "hPolyMsg",
+            "Enter Polymer Name, δD, δP and δH.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(editingHPoly < 0){
+
+        hspPolyDB.push(x);
+
+    }
+
+    else{
+
+        hspPolyDB[editingHPoly] = x;
+
+    }
+
+
+    saveAny(
+        HSP_POLY_DB_KEY,
+        hspPolyDB
+    );
+
+
+    editingHPoly = -1;
+
+    clearHSPPoly();
+
+    renderHPolyTable();
+
+
+    setMsg(
+        "hPolyMsg",
+        "HSP polymer saved successfully.",
+        "good"
+    );
+
+}
+
+
+function clearHSPPoly(){
+
+    document.getElementById("hPolyName").value = "";
+
+    document.getElementById("hPolyD").value = "";
+
+    document.getElementById("hPolyP").value = "";
+
+    document.getElementById("hPolyH").value = "";
+
+    editingHPoly = -1;
+
+}
+
+
+function editHSPPoly(i){
+
+    const x = hspPolyDB[i];
+
+    editingHPoly = i;
+
+    document.getElementById("hPolyName").value = x.name;
+
+    document.getElementById("hPolyD").value = x.d;
+
+    document.getElementById("hPolyP").value = x.p;
+
+    document.getElementById("hPolyH").value = x.h;
+
+}
+
+
+function deleteHSPPoly(i){
+
+    if(
+        confirm(
+            "Delete " +
+            hspPolyDB[i].name +
+            "?"
+        )
+    ){
+
+        hspPolyDB.splice(i,1);
+
+        saveAny(
+            HSP_POLY_DB_KEY,
+            hspPolyDB
+        );
+
+        renderHPolyTable();
+
+    }
+
+}
+
+
+function renderHPolyTable(){
+
+    document.getElementById(
+        "hPolyTable"
+    ).innerHTML =
+
+    hspPolyDB.map(
+        (x,i) => `
+
+        <tr>
+
+        <td>${esc(x.name)}</td>
+
+        <td>${fmt(x.d)}</td>
+
+        <td>${fmt(x.p)}</td>
+
+        <td>${fmt(x.h)}</td>
+
+        <td>
+
+        <button
+        class="btn secondary"
+        onclick="editHSPPoly(${i})">
+
+        Edit
+
+        </button>
+
+        <button
+        class="btn danger"
+        onclick="deleteHSPPoly(${i})">
+
+        Delete
+
+        </button>
+
+        </td>
+
+        </tr>
+
+        `
+    ).join("");
+
+}
+
+
+/* =====================================================
+   ESOL CALCULATION
+   INTERNAL ONLY
+   FORMULA IS NOT DISPLAYED
+===================================================== */
+
+function calculateESOL(
+    logP,
+    mw,
+    rb,
+    ap
+){
+
+    return (
+        0.16
+        - 1.5 * logP
+        - 0.01 * (mw - 40)
+        + 0.066 * rb
+        + 0.066 * ap
+    );
+
+}
+
+
+/* =====================================================
+   SOLUBILITY ADMIN
+===================================================== */
+
+function saveSolMaterial(){
+
+    const x = {
+
+        name:
+        document.getElementById("mName").value.trim(),
+
+        logP:
+        Number(
+            document.getElementById("mLogP").value
+        ),
+
+        mw:
+        Number(
+            document.getElementById("mMW").value
+        ),
+
+        ap:
+        Number(
+            document.getElementById("mAP").value
+        ),
+
+        rb:
+        Number(
+            document.getElementById("mRB").value
+        )
+
+    };
+
+
+    if(
+        !x.name ||
+        ![
+            x.logP,
+            x.mw,
+            x.ap,
+            x.rb
+        ].every(Number.isFinite)
+    ){
+
+        setMsg(
+            "solMsg",
+            "Enter all material fields correctly.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(x.mw <= 0){
+
+        setMsg(
+            "solMsg",
+            "Molecular Weight must be greater than 0.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        x.ap < 0 ||
+        x.ap > 1
+    ){
+
+        setMsg(
+            "solMsg",
+            "AP must be between 0 and 1.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(editingSol < 0){
+
+        solDB.push(x);
+
+    }
+
+    else{
+
+        solDB[editingSol] = x;
+
+    }
+
+
+    saveAny(
+        SOL_DB_KEY,
+        solDB
+    );
+
+
+    editingSol = -1;
+
+    clearSolForm();
+
+    renderSolTable();
+
+    renderMaterialInputs();
+
+
+    setMsg(
+        "solMsg",
+        "Material saved successfully.",
+        "good"
+    );
+
+}
+
+
+function clearSolForm(){
+
+    document.getElementById("mName").value = "";
+
+    document.getElementById("mLogP").value = "";
+
+    document.getElementById("mMW").value = "";
+
+    document.getElementById("mAP").value = "";
+
+    document.getElementById("mRB").value = "";
+
+    editingSol = -1;
+
+}
+
+
+function editSolMaterial(i){
+
+    const x = solDB[i];
+
+    editingSol = i;
+
+    document.getElementById("mName").value = x.name;
+
+    document.getElementById("mLogP").value = x.logP;
+
+    document.getElementById("mMW").value = x.mw;
+
+    document.getElementById("mAP").value = x.ap;
+
+    document.getElementById("mRB").value = x.rb;
+
+}
+
+
+function deleteSolMaterial(i){
+
+    if(
+        confirm(
+            "Delete " +
+            solDB[i].name +
+            "?"
+        )
+    ){
+
+        solDB.splice(i,1);
+
+        saveAny(
+            SOL_DB_KEY,
+            solDB
+        );
+
+        renderSolTable();
+
+        renderMaterialInputs();
+
+    }
+
+}
+
+
+function renderSolTable(){
+
+    document.getElementById(
+        "solTable"
+    ).innerHTML =
+
+    solDB.map(
+        (x,i) => {
+
+            const logS =
+            calculateESOL(
+                x.logP,
+                x.mw,
+                x.rb,
+                x.ap
+            );
+
+
+            return `
+
+            <tr>
+
+            <td>${esc(x.name)}</td>
+
+            <td>${fmt(x.logP)}</td>
+
+            <td>${fmt(x.mw)}</td>
+
+            <td>${fmt(x.ap)}</td>
+
+            <td>${fmt(x.rb)}</td>
+
+            <td>${logS.toFixed(6)}</td>
+
+            <td>
+
+            <button
+            class="btn secondary"
+            onclick="editSolMaterial(${i})">
+
+            Edit
+
+            </button>
+
+            <button
+            class="btn danger"
+            onclick="deleteSolMaterial(${i})">
+
+            Delete
+
+            </button>
+
+            </td>
+
+            </tr>
+
+            `;
+
+        }
+    ).join("");
+
+}
+
+
+/* =====================================================
+   MATERIAL INPUTS
+===================================================== */
+
+function renderMaterialInputs(){
+
+    const n =
+    Number(
+        document.getElementById(
+            "materialCount"
+        ).value
+    );
+
+
+    let html = "";
+
+
+    for(
+        let i=1;
+        i<=n;
+        i++
+    ){
+
+        html += `
+
+        <div class="card material-card">
+
+        <h3>
+            Material ${i}
+        </h3>
+
+
+        <label>
+            Select Material ${i}
+        </label>
+
+
+        <select
+            id="mat${i}"
+            onchange="showDescriptors(${i})">
+
+            <option value="">
+                -- Select material --
+            </option>
+
+            ${
+                solDB.map(
+                    (x,j) =>
+                    `<option value="${j}">
+                    ${esc(x.name)}
+                    </option>`
+                ).join("")
+            }
+
+        </select>
+
+
+        <div
+            id="desc${i}"
+            class="descriptors">
+        </div>
+
+
+        <div
+            id="esol${i}">
+        </div>
+
+        </div>
+
+        `;
+
+    }
+
+
+    document.getElementById(
+        "materialsArea"
+    ).innerHTML = html;
+
+
+    renderRatios();
+
+}
+
+
+/* =====================================================
+   SHOW DESCRIPTORS
+===================================================== */
+
+function showDescriptors(i){
+
+    const idx =
+    document.getElementById(
+        "mat"+i
+    ).value;
+
+
+    const box =
+    document.getElementById(
+        "desc"+i
+    );
+
+
+    const esolBox =
+    document.getElementById(
+        "esol"+i
+    );
+
+
+    if(idx === ""){
+
+        box.innerHTML = "";
+
+        esolBox.innerHTML = "";
+
+        return;
+
+    }
+
+
+    const x =
+    solDB[
+        Number(idx)
+    ];
+
+
+    /* ESOL IS CALCULATED
+       BUT FORMULA IS HIDDEN */
+
+    const logS =
+    calculateESOL(
+        x.logP,
+        x.mw,
+        x.rb,
+        x.ap
+    );
+
+
+    /* ONLY DESCRIPTORS */
+
+    box.innerHTML =
+
+        metric(
+            "LogP",
+            fmt(x.logP)
+        )
+
+        +
+
+        metric(
+            "Molecular Weight",
+            fmt(x.mw)+" g/mol"
+        )
+
+        +
+
+        metric(
+            "Aromatic Proportion",
+            fmt(x.ap)
+        )
+
+        +
+
+        metric(
+            "Rotatable Bonds",
+            fmt(x.rb)
+        );
+
+
+    /* SEPARATE ESOL VALUE */
+
+    esolBox.innerHTML = `
+
+    <div class="esol-box">
+
+        <div class="esol-title">
+            ESOL Predicted Log S
+        </div>
+
+        <div class="esol-value">
+            ${logS.toFixed(6)}
+        </div>
+
+    </div>
+
+    `;
+
+}
+
+
+function metric(k,v){
+
+    return `
+
+    <div class="metric">
+
+        <div class="k">
+            ${k}
+        </div>
+
+        <div class="v">
+            ${v}
+        </div>
+
+    </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   RATIOS
+===================================================== */
+
+function renderRatios(){
+
+    const n =
+    Number(
+        document.getElementById(
+            "materialCount"
+        ).value
+    );
+
+
+    const opts =
+    n === 2
+
+    ?
+
+    [
+        "1:1",
+        "1:2",
+        "1:3",
+        "2:1",
+        "2:3",
+        "3:1",
+        "3:2",
+        "3:3",
+        "Custom Ratio"
+    ]
+
+    :
+
+    [
+        "1:1:1",
+        "1:1:2",
+        "1:2:1",
+        "1:2:3",
+        "1:3:1",
+        "2:1:1",
+        "2:3:1",
+        "3:1:2",
+        "3:3:3",
+        "Custom Ratio"
+    ];
+
+
+    document.getElementById(
+        "ratioPreset"
+    ).innerHTML =
+
+    opts.map(
+        x =>
+        `<option value="${x}">
+        ${x}
+        </option>`
+    ).join("");
+
+
+    ratioChanged();
+
+}
+
+
+function ratioChanged(){
+
+    const n =
+    Number(
+        document.getElementById(
+            "materialCount"
+        ).value
+    );
+
+
+    const v =
+    document.getElementById(
+        "ratioPreset"
+    ).value;
+
+
+    const box =
+    document.getElementById(
+        "customRatioBox"
+    );
+
+
+    if(v === "Custom Ratio"){
+
+        box.style.display = "block";
+
+
+        box.innerHTML = `
+
+        <div class="grid3">
+
+        ${
+            Array.from(
+                {length:n},
+                (_,i) => `
+
+                <div>
+
+                <label>
+                    Ratio ${i+1}
+                </label>
+
+                <input
+                    id="custom${i+1}"
+                    type="number"
+                    min="0.000001"
+                    step="any"
+                    placeholder="Enter ratio"
+                    oninput="updateWeights()">
+
+                </div>
+
+                `
+            ).join("")
+        }
+
+        </div>
+
+        `;
+
+    }
+
+    else{
+
+        box.style.display = "none";
+
+    }
+
+
+    updateWeights();
+
+}
+
+
+function getRatios(){
+
+    const n =
+    Number(
+        document.getElementById(
+            "materialCount"
+        ).value
+    );
+
+
+    const v =
+    document.getElementById(
+        "ratioPreset"
+    ).value;
+
+
+    if(v !== "Custom Ratio"){
+
+        return v
+        .split(":")
+        .map(Number);
+
+    }
+
+
+    return Array.from(
+        {length:n},
+        (_,i) =>
+        Number(
+            document.getElementById(
+                "custom"+(i+1)
+            )?.value
+        )
+    );
+
+}
+
+
+/* =====================================================
+   WEIGHTS
+===================================================== */
+
+function updateWeights(){
+
+    const r =
+    getRatios();
+
+
+    const box =
+    document.getElementById(
+        "weightDisplay"
+    );
+
+
+    if(
+        r.some(
+            x =>
+            !Number.isFinite(x) ||
+            x <= 0
+        )
+    ){
+
+        box.innerHTML = `
+
+        <div style="color:#b91c1c">
+            Enter valid positive ratios.
+        </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const total =
+    r.reduce(
+        (a,b) => a+b,
+        0
+    );
+
+
+    const w =
+    r.map(
+        x => x/total
+    );
+
+
+    box.innerHTML = `
+
+    <b>
+        Normalized Weights
+    </b>
+
+    <div class="weight-values">
+
+    ${
+        w.map(
+            (x,i) => `
+
+            <div class="weight-item">
+
+                <div class="k">
+                    W${i+1}
+                </div>
+
+                <div class="v">
+                    ${x.toFixed(6)}
+                </div>
+
+            </div>
+
+            `
+        ).join("")
+    }
+
+    </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   FINAL CALCULATION
+===================================================== */
+
+function calculate(){
+
+    const n =
+    Number(
+        document.getElementById(
+            "materialCount"
+        ).value
+    );
+
+
+    const ratios =
+    getRatios();
+
+
+    if(
+        ratios.some(
+            x =>
+            !Number.isFinite(x) ||
+            x <= 0
+        )
+    ){
+
+        showError(
+            "Please enter valid positive ratios."
+        );
+
+        return;
+
+    }
+
+
+    const totalRatio =
+    ratios.reduce(
+        (a,b) => a+b,
+        0
+    );
+
+
+    /* W1, W2, W3 */
+
+    const weights =
+    ratios.map(
+        r =>
+        r / totalRatio
+    );
+
+
+    const items = [];
+
+
+    for(
+        let i=1;
+        i<=n;
+        i++
+    ){
+
+        const select =
+        document.getElementById(
+            "mat"+i
+        );
+
+
+        if(
+            !select ||
+            select.value === ""
+        ){
+
+            showError(
+                "Please select Material "+i+"."
+            );
+
+            return;
+
+        }
+
+
+        items.push(
+            solDB[
+                Number(
+                    select.value
+                )
+            ]
+        );
+
+    }
+
+
+    /* =================================================
+       INDIVIDUAL ESOL LOG S
+       FORMULA HIDDEN
+    ================================================= */
+
+    const individualLogS =
+    items.map(
+        x =>
+        calculateESOL(
+            x.logP,
+            x.mw,
+            x.rb,
+            x.ap
+        )
+    );
+
+
+    /* =================================================
+       LOG-LINEAR MIXING
+    ================================================= */
+
+    let logSmix = 0;
+
+
+    for(
+        let i=0;
+        i<n;
+        i++
+    ){
+
+        logSmix +=
+        weights[i] *
+        individualLogS[i];
+
+    }
+
+
+    /* =================================================
+       LOG S -> MOL/L
+    ================================================= */
+
+    const Smix =
+    Math.pow(
+        10,
+        logSmix
+    );
+
+
+    /* =================================================
+       RATIO-WEIGHTED EFFECTIVE MW
+    ================================================= */
+
+    let effectiveMW = 0;
+
+
+    for(
+        let i=0;
+        i<n;
+        i++
+    ){
+
+        effectiveMW +=
+        ratios[i] *
+        items[i].mw;
+
+    }
+
+
+    effectiveMW =
+    effectiveMW /
+    totalRatio;
+
+
+    /* =================================================
+       MOL/L -> MICROGRAM/L
+    ================================================= */
+
+    const microgramL =
+    Smix *
+    effectiveMW *
+    1000000;
+
+
+    /* =================================================
+       FINAL DISPLAY
+       NO FORMULAS
+    ================================================= */
+
+    const result =
+    document.getElementById(
+        "result"
+    );
+
+
+    result.innerHTML = `
+
+    <div class="result-title">
+
+        Predicted Combined Solubility
+
+    </div>
+
+
+    <div class="big">
+
+        ${decimal(Smix)} mol/L
+
+    </div>
+
+
+    <div class="final-grid">
+
+
+        <div class="final-box">
+
+            <div class="k">
+                Combined Log S
+            </div>
+
+            <div class="v">
+                ${logSmix.toFixed(6)}
+            </div>
+
+        </div>
+
+
+        <div class="final-box">
+
+            <div class="k">
+                Predicted Combined Solubility
+            </div>
+
+            <div class="v">
+                ${decimal(Smix)} mol/L
+            </div>
+
+        </div>
+
+
+        <div class="final-box">
+
+            <div class="k">
+                Ratio-Weighted Effective MW
+            </div>
+
+            <div class="v">
+                ${decimal(effectiveMW)} g/mol
+            </div>
+
+        </div>
+
+
+        <div class="final-box">
+
+            <div class="k">
+                Mass-Equivalent Combined Solubility
+            </div>
+
+            <div class="v">
+                ${decimal(microgramL)} µg/L
+            </div>
+
+        </div>
+
+
+        <div class="final-box">
+
+            <div class="k">
+                Selected Molar Ratio
+            </div>
+
+            <div class="v">
+                ${ratios.join(" : ")}
+            </div>
+
+        </div>
+
+
+        ${
+            weights.map(
+                (w,i) => `
+
+                <div class="final-box">
+
+                    <div class="k">
+                        Weight W${i+1}
+                    </div>
+
+                    <div class="v">
+                        ${w.toFixed(6)}
+                    </div>
+
+                </div>
+
+                `
+            ).join("")
+        }
+
+
+    </div>
+
+
+    <div
+        class="small"
+        style="margin-top:18px">
+
+        Values shown above are model-predicted values
+        based on the selected materials and molar ratio.
+
+    </div>
+
+    `;
+
+
+    result.classList.add("show");
+
+
+    result.scrollIntoView({
+        behavior:"smooth",
+        block:"nearest"
+    });
+
+}
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+function showError(text){
+
+    const r =
+    document.getElementById(
+        "result"
+    );
+
+
+    r.innerHTML = `
+
+    <div class="error">
+
+        ${text}
+
+    </div>
+
+    `;
+
+
+    r.classList.add("show");
+
+}
+
+
+/* =====================================================
+   NUMBER FORMAT
+===================================================== */
+
+function decimal(x){
+
+    if(x === 0){
+
+        return "0";
+
+    }
+
+
+    return Number(x)
+    .toLocaleString(
+        "en-US",
+        {
+            useGrouping:false,
+            maximumFractionDigits:15
+        }
+    );
+
+}
+
+
+function fmt(x){
+
+    return Number(x)
+    .toFixed(4)
+    .replace(
+        /\.?0+$/,
+        ""
+    );
+
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function setMsg(
+    id,
+    text,
+    type
+){
+
+    const e =
+    document.getElementById(id);
+
+
+    e.textContent =
+    text;
+
+
+    e.style.color =
+    type === "error"
+    ? "#b91c1c"
+    : "#15803d";
+
+}
+
+
+/* =====================================================
+   SECURITY
+===================================================== */
+
+function esc(s){
+
+    return String(s)
+    .replace(
+        /[&<>"']/g,
+        m =>
+        ({
+            "&":"&amp;",
+            "<":"&lt;",
+            ">":"&gt;",
+            '"':"&quot;",
+            "'":"&#39;"
+        }[m])
+    );
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+renderMaterialInputs();
+
+</script>
+
+</body>
+</html>
